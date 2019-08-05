@@ -18,7 +18,7 @@ public class signup extends AppCompatActivity {
     }
 
     public void sendMessage1(View view) {
-        Intent intent = new Intent(this, SearchNavi.class);
+        Intent intent = new Intent(this, MapLoc.class);
         // EditText editText = (EditText) findViewById(R.id.editText);
         // String message = editText.getText().toString();
         //   intent.putExtra(EXTRA_MESSAGE, message);
