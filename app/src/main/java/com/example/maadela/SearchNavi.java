@@ -102,9 +102,11 @@ public class SearchNavi extends Activity
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
+            Intent intent = new Intent(this, MapLoc.class);
+            startActivity(intent);
+        } else if (id == R.id.prf) {
+            Intent intent = new Intent(this, signup.class);
+            startActivity(intent);
         } else if (id == R.id.nav_tools) {
 
         } else if (id == R.id.nav_share) {
