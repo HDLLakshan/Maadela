@@ -119,7 +119,7 @@ public class SearchNavi extends Activity
     }
 
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, MapSearched.class);
        // EditText editText = (EditText) findViewById(R.id.editText);
        // String message = editText.getText().toString();
      //   intent.putExtra(EXTRA_MESSAGE, message);
