@@ -1,11 +1,13 @@
 package com.example.maadela;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,6 +42,13 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class MapLoc extends AppCompatActivity implements OnMapReadyCallback {
 
+    public void sendSearch(View view) {
+        Intent intent = new Intent(this, SearchNavi.class);
+        // EditText editText = (EditText) findViewById(R.id.editText);
+        // String message = editText.getText().toString();
+        //   intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
     public void onMapReady(GoogleMap gm) {
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "OnMapReady: map is ready");
@@ -155,7 +164,7 @@ public class MapLoc extends AppCompatActivity implements OnMapReadyCallback {
                         Log.d(TAG,"found location");
                         Location current = (Location) task.getResult();
 
-                        System.out.println(current.getLatitude());
+//                        System.out.println(current.getLatitude());
 
                         moveCamera(new LatLng(current.getLatitude(),current.getLongitude())
                                 ,15f);
