@@ -9,31 +9,32 @@
 
     <ImageView
         android:id="@+id/img"
-        android:layout_width="180dp"
-        android:layout_height="180dp"
+        android:layout_width="215dp"
+        android:layout_height="191dp"
         android:layout_centerInParent="true"
         android:layout_marginStart="115dp"
         android:layout_marginTop="192dp"
         android:layout_marginEnd="116dp"
-        android:layout_marginBottom="52dp"
+        android:layout_marginBottom="8dp"
         android:contentDescription="App Image"
-        android:src="@drawable/icon"
-        app:layout_constraintBottom_toTopOf="@+id/editText"
+        android:src="@drawable/offical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.485"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.017" />
 
     <TextView
         android:id="@+id/editText"
-        android:layout_width="207dp"
-        android:layout_height="92dp"
+        android:layout_width="199dp"
+        android:layout_height="109dp"
         android:layout_below="@id/img"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="102dp"
-        android:layout_marginTop="41dp"
-        android:layout_marginEnd="102dp"
-        android:layout_marginBottom="204dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="@string/name"
@@ -41,8 +42,9 @@
         android:textSize="66sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.744"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.651" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

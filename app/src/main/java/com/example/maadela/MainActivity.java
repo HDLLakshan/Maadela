@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         handler.postDelayed( new Runnable() {
             @Override
             public void run() {
-               Intent intent = new Intent( MainActivity.this, SearchNavi.class );
+               Intent intent = new Intent( MainActivity.this, signup.class );
                startActivity(intent);
                 finish();
             }
