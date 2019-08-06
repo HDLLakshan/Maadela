@@ -60,13 +60,15 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
                         this, R.raw.style_json));
         LatLng negombo = new LatLng(7.188543, 79.833628);
         LatLng negombo1 = new LatLng(7.192248, 79.826422);
-        LatLng Kollupitiyamarket = new LatLng(6.912015, 79.850300);
-        LatLng KollupitiyTemp = new LatLng(6.912015, 79.850300);
+        //LatLng Kollupitiyamarket = new LatLng(6.912015, 79.850300);
+        LatLng KollupitiyTemp = new LatLng(6.910643, 79.849744);
+        LatLng KollupitiyTemp1 = new LatLng(6.926350, 79.843963);
 
         MMap.addMarker(new MarkerOptions().position(negombo1).title("Fish market \n Tuna:1KG: Rs.1200 "));
         MMap.addMarker(new MarkerOptions().position(negombo).title("Market-Negombo \n Tuna:1KG: Rs.1100"));
-        MMap.addMarker(new MarkerOptions().position(Kollupitiyamarket).title("Kollupitiya Market \n Tuna:1KG: Rs.1000"));
-        MMap.addMarker(new MarkerOptions().position(KollupitiyTemp).title("Seller temporary \n Tuna:1KG: Rs.1200"));
+        //MMap.addMarker(new MarkerOptions().position(Kollupitiyamarket).title("Kollupitiya Market \n Tuna:1KG: Rs.1000"));
+        MMap.addMarker(new MarkerOptions().position(KollupitiyTemp).title("Seller Lakshan temporary \n Tuna:1KG: Rs.1200"));
+        MMap.addMarker(new MarkerOptions().position(KollupitiyTemp1).title("Seller Cleman temporary \n Tuna:1KG: Rs.1200"));
 
         getDeviceLocation();
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -150,7 +152,7 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_loc);
+        setContentView(R.layout.activity_map_searched);
         getLocationPermission();
     }
 
