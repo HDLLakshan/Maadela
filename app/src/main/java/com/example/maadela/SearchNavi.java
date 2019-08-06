@@ -104,9 +104,6 @@ public class SearchNavi extends Activity
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(this, MapLoc.class);
             startActivity(intent);
-        } else if (id == R.id.prf) {
-            Intent intent = new Intent(this, signup.class);
-            startActivity(intent);
         } else if (id == R.id.nav_tools) {
 
         } else if (id == R.id.nav_share) {
