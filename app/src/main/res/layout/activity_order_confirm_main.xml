@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".OrderConfirmMain">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="321dp"
+        android:layout_height="83dp"
+        android:layout_marginStart="69dp"
+        android:layout_marginTop="58dp"
+        android:layout_marginEnd="69dp"
+        android:layout_marginBottom="558dp"
+        android:text="Your Order Has Been Confirmed !"
+        android:textAlignment="center"
+        android:textColor="#DC0F0E0E"
+        android:textSize="27sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="2dp"
+        android:background="#EBFFFFFF"
+        android:scrollbarThumbHorizontal="@android:color/background_light"
+        android:text="View Order"
+        android:textColor="#C6FFFFFF"
+        android:textColorHighlight="#FFFCFC"
+        android:textColorHint="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/Fafa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <fragment
+        android:id="@+id/Fafa"
+        android:name="com.example.maadela.Fishy"
+        android:layout_width="380dp"
+        android:layout_height="460dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.533"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintVertical_bias="0.154" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="317dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="41dp"
+        android:layout_marginBottom="23dp"
+        android:text="Thank you for your purchase. Please come again."
+        android:textAlignment="center"
+        android:textColor="#ED0F0E0E"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Fafa" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

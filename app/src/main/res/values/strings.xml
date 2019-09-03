@@ -17,5 +17,24 @@
     <string name="menu_send">Send</string>
     <string name="title_activity_maps">Map</string>
     <string name="Google_API">AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4</string>
+    <string name="title_activity_order_confirm_main">OrderConfirmMain</string>
+
+
+
+    <string name="fish_prompt">Choose Fish type </string>
+
+    <string-array name="fish_arrays">
+        <item>Herring</item>
+        <item>Perch</item>
+        <item>Crab</item>
+        <item> Lobster</item>
+        <item>Seabass</item>
+        <item> Prawn</item>
+        <item> Swordfish</item>
+        <item>Tilapia</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="raviya">12</string>
 </resources>

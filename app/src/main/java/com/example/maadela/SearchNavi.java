@@ -124,4 +124,12 @@ public class SearchNavi extends Activity
      //   intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
+
+    public void sendOrderMessage(View view) {
+        Intent intent = new Intent(this,AdvanceOrder.class);
+        // EditText editText = (EditText) findViewById(R.id.editText);
+        // String message = editText.getText().toString();
+        //   intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
 }
