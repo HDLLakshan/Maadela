@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "47243451926",
+    "firebase_url": "https://maadela-8b2bb.firebaseio.com",
+    "project_id": "maadela-8b2bb",
+    "storage_bucket": "maadela-8b2bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47243451926:android:1b20be53f3df6f2a",
+        "android_client_info": {
+          "package_name": "com.example.maadela"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47243451926-3n1edeu3cuq5k9spr3os41oe4pr9o3bc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBri-Y-9zMWe6xaYsqq5GTwlhBOV9CurBo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47243451926-3n1edeu3cuq5k9spr3os41oe4pr9o3bc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
