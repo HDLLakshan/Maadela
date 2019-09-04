@@ -104,9 +104,6 @@ public class SearchNavi extends Activity
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(this, MapLoc.class);
             startActivity(intent);
-        } else if (id == R.id.prf) {
-            Intent intent = new Intent(this, signup.class);
-            startActivity(intent);
         } else if (id == R.id.nav_tools) {
 
         } else if (id == R.id.nav_share) {
@@ -121,7 +118,7 @@ public class SearchNavi extends Activity
     }
 
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, MapsActivity.class);
+        Intent intent = new Intent(this, MapSearched.class);
        // EditText editText = (EditText) findViewById(R.id.editText);
        // String message = editText.getText().toString();
      //   intent.putExtra(EXTRA_MESSAGE, message);
