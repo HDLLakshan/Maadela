@@ -20,7 +20,6 @@
     <string name="title_activity_order_confirm_main">OrderConfirmMain</string>
 
 
-
     <string name="fish_prompt">Choose Fish type </string>
 
     <string-array name="fish_arrays">

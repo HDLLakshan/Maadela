@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".AdvanceOrder"></activity>
+        <activity android:name=".MapsSearchAll"></activity>
+        <activity android:name=".AdvanceOrder" />
         <activity android:name=".OrderConfirmMain" />
         <activity android:name=".MapSearched" />
 
