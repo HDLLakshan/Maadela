@@ -1,6 +1,9 @@
 package com.example.maadela;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,12 +12,18 @@ import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -27,6 +36,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class SearchNavi extends Activity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -59,6 +73,42 @@ public class SearchNavi extends Activity
         drawer.addDrawerListener( toggle );
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener( this );
+
+        //Dislpay a toast when update db
+
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        final String DateShopOpend = df.format(c);
+         String TimeShopOpend = new SimpleDateFormat("HH:mm").format(new Date());
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference reference = firebaseDatabase.getReference();
+        reference.child( "DailySelling" ).child( DateShopOpend ).addValueEventListener( new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                        for(DataSnapshot child:children){
+                           // DailySelling dailySelling = child.getValue(DailySelling.class);
+//                            String shopname = dataSnapshot.child( DateShopOpend ).getValue().toString();
+
+                          //  Toast.makeText( SearchNavi.this,"New Shop Opend", Toast.LENGTH_LONG).show();
+                            NotificationManager notif=(NotificationManager)getSystemService( Context.NOTIFICATION_SERVICE);
+                            Notification notify=new Notification.Builder
+                                    (getApplicationContext()).setContentTitle("New Shop Opend").setContentText(DateShopOpend).setSmallIcon(R.drawable.icon).build();
+
+                            notify.flags |= Notification.FLAG_AUTO_CANCEL;
+                            notif.notify(0, notify);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                } );
+
+
     }
 
     @Override
@@ -119,17 +169,11 @@ public class SearchNavi extends Activity
 
     public void sendMessage(View view) {
         Intent intent = new Intent(this, MapSearched.class);
-       // EditText editText = (EditText) findViewById(R.id.editText);
-       // String message = editText.getText().toString();
-     //   intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
 
     public void sendOrderMessage(View view) {
-        Intent intent = new Intent(this,AdvanceOrder.class);
-        // EditText editText = (EditText) findViewById(R.id.editText);
-        // String message = editText.getText().toString();
-        //   intent.putExtra(EXTRA_MESSAGE, message);
+        Intent intent = new Intent(this,Shop.class);
         startActivity(intent);
     }
 }
