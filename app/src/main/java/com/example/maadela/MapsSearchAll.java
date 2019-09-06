@@ -11,6 +11,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -53,6 +55,9 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_searched);
         getLocationPermission();
+
+        ListView ListView = findViewById(R.id.ListView);
+        ListView.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,new String[]{"balaya","tuna","chuttuu",}));
     }
 
     public void onMapReady(GoogleMap gm) {
