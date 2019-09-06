@@ -3,7 +3,6 @@ package com.example.maadela;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -49,7 +48,7 @@ public class Shop extends Activity {
         DateShopOpend = df.format(c);
         shopname = "FreshFish";
         databaseFish = FirebaseDatabase.getInstance().getReference("DailySelling").child(DateShopOpend).child(shopname);
-        listviewfish = (ListView)findViewById( R.id.fishlist );
+        listviewfish = (ListView)findViewById( R.id.fishslist );
         fishlist = new ArrayList<>(  );
 
         databaseFish.addValueEventListener( new ValueEventListener() {
@@ -67,9 +66,8 @@ public class Shop extends Activity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         System.out.println("dfsfsd");
-                        //  Toast.makeText(getApplicationContext(),fishlist.get( i ).getFishname(),Toast.LENGTH_LONG ).show();
+                        //Toast.makeText(getApplicationContext(),fishlist.get( i ).getFishname(),Toast.LENGTH_LONG ).show();
                         sendMessage(i);
-
                     }
                 } );
             }
