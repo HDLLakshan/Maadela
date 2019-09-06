@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,59 +15,55 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.Security;
-import java.util.Map;
 
-import javax.net.ssl.HttpsURLConnection;
 
 public class MapSearched extends AppCompatActivity implements OnMapReadyCallback {
 
-    public void sendSearch(View view) {
-        Intent intent = new Intent(this, SearchNavi.class);
-        // EditText editText = (EditText) findViewById(R.id.editText);
-        // String message = editText.getText().toString();
-        //   intent.putExtra(EXTRA_MESSAGE, message);
-        startActivity(intent);
+    private static final String TAG = "MapActivity";
+    private static final String FiLo = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String CoLo = Manifest.permission.ACCESS_COARSE_LOCATION ;
+    private static final int Location_re_code = 1234;
+    private Boolean mLocationG = false;
+    private GoogleMap MMap;
+    private FusedLocationProviderClient FLPC;
+    DatabaseReference dbRef;
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map_searched);
+        getLocationPermission();
     }
+
     public void onMapReady(GoogleMap gm) {
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
         Log.d(TAG, "OnMapReady: map is ready");
-        MMap = gm;
-        MMap.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                        this, R.raw.style_json));
-        LatLng negombo = new LatLng(7.188543, 79.833628);
-        LatLng negombo1 = new LatLng(7.192248, 79.826422);
-        //LatLng Kollupitiyamarket = new LatLng(6.912015, 79.850300);
-        LatLng KollupitiyTemp = new LatLng(6.910643, 79.849744);
-        LatLng KollupitiyTemp1 = new LatLng(6.926350, 79.843963);
 
-        MMap.addMarker(new MarkerOptions().position(negombo1).title("Fish market \n Tuna:1KG: Rs.1200 "));
-        MMap.addMarker(new MarkerOptions().position(negombo).title("Market-Negombo \n Tuna:1KG: Rs.1100"));
-        //MMap.addMarker(new MarkerOptions().position(Kollupitiyamarket).title("Kollupitiya Market \n Tuna:1KG: Rs.1000"));
-        MMap.addMarker(new MarkerOptions().position(KollupitiyTemp).title("Seller Lakshan temporary \n Tuna:1KG: Rs.1200"));
-        MMap.addMarker(new MarkerOptions().position(KollupitiyTemp1).title("Seller Cleman temporary \n Tuna:1KG: Rs.1200"));
+        MMap = gm;
+        MMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
+
+        showPlace("keels");
+
 
         getDeviceLocation();
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -84,77 +79,55 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
         MMap.setMyLocationEnabled(true);
     }
 
+    public void showAll(){
+            dbRef = FirebaseDatabase.getInstance().getReference().child("location");
+            dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-    private String getURL(LatLng l1,LatLng l2){
-        String str_org= "örigin"+ l1.latitude+","+l1.longitude;
+                    for(int i=1;i<=dataSnapshot.getChildrenCount();i++) {
+                        LatLng negombo = new LatLng(Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lan").getValue().toString()), Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lon").getValue().toString()));
+                        MMap.addMarker(new MarkerOptions().position(negombo).title(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString()));
+                    }
+                }
 
-        String str_dest = "destination=1"+ l2.latitude+","+l2.longitude;
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        String sensor ="sensor=false";
+                }
+            });
 
-        String mode="mode=driving";
 
-        String param = str_org+"&"+str_dest+"&"+sensor+"&"+mode;
+            Toast.makeText(getApplicationContext(), "All locations are loaded", Toast.LENGTH_SHORT).show();
 
-        String output = "json";
 
-        String URL="https://maps.googleapis.com/maps/api/directions/"+ output+"?"+param;
-
-        return URL;
     }
 
-    private String requestDirection(String requrl) throws IOException {
-        String respose="";
-        InputStream is=null;
-        HttpURLConnection uc= null;
+    public void showPlace(final String FishType){
+        dbRef = FirebaseDatabase.getInstance().getReference().child("location");
 
-        try{
-            URL url= new URL(requrl);
-            uc = (HttpURLConnection)url.openConnection();
-            uc.connect();
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-            is = uc.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-
-            StringBuffer stringBuffer = new StringBuffer();
-            String line="";
-            while ((line = br.readLine()) != null){
-                stringBuffer.append(line);
+                for(int i=1;i<=dataSnapshot.getChildrenCount();i++) {
+                    if(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString().equalsIgnoreCase(FishType)) {
+                        LatLng negombo = new LatLng(Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lan").getValue().toString()), Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lon").getValue().toString()));
+                        MMap.addMarker(new MarkerOptions().position(negombo).title(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString()));
+                    }
+                }
             }
 
-            respose = stringBuffer.toString();
-            br.close();
-            isr.close();
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-        }catch (Exception e){
-
-        }finally {
-            if(is != null){
-                is.close();
             }
-            uc.disconnect();
-        }
-        return respose;
+        });
 
+
+        Toast.makeText(getApplicationContext(), "All locations are loaded", Toast.LENGTH_SHORT).show();
     }
 
-    private static final String TAG = "MapActivity";
-
-    private static final String FiLo = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String CoLo = Manifest.permission.ACCESS_COARSE_LOCATION ;
-    private static final int Location_re_code = 1234;
-
-    private Boolean mLocationG = false;
-    private GoogleMap MMap;
-    private FusedLocationProviderClient FLPC;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_searched);
-        getLocationPermission();
-    }
 
     private void getDeviceLocation(){
         Log.d(TAG,"device location");
@@ -241,6 +214,61 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
 
             }
         }
+    }
+
+
+    private String getURL(LatLng l1,LatLng l2){
+        String str_org= "örigin"+ l1.latitude+","+l1.longitude;
+
+        String str_dest = "destination=1"+ l2.latitude+","+l2.longitude;
+
+        String sensor ="sensor=false";
+
+        String mode="mode=driving";
+
+        String param = str_org+"&"+str_dest+"&"+sensor+"&"+mode;
+
+        String output = "json";
+
+        String URL="https://maps.googleapis.com/maps/api/directions/"+ output+"?"+param;
+
+        return URL;
+    }
+
+    private String requestDirection(String requrl) throws IOException {
+        String respose="";
+        InputStream is=null;
+        HttpURLConnection uc= null;
+
+        try{
+            URL url= new URL(requrl);
+            uc = (HttpURLConnection)url.openConnection();
+            uc.connect();
+
+            is = uc.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+
+            StringBuffer stringBuffer = new StringBuffer();
+            String line="";
+            while ((line = br.readLine()) != null){
+                stringBuffer.append(line);
+            }
+
+            respose = stringBuffer.toString();
+            br.close();
+            isr.close();
+
+        }catch (Exception e){
+
+        }finally {
+            if(is != null){
+                is.close();
+            }
+            uc.disconnect();
+        }
+        return respose;
+
     }
 
 
