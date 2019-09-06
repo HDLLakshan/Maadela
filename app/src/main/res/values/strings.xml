@@ -22,6 +22,10 @@
 
     <string name="fish_prompt">Choose Fish type </string>
 
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="raviya">12</string>
     <string-array name="fish_arrays">
         <item>Herring</item>
         <item>Perch</item>
@@ -32,8 +36,4 @@
         <item> Swordfish</item>
         <item>Tilapia</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="raviya">12</string>
 </resources>

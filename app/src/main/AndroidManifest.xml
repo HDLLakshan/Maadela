@@ -17,6 +17,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MapsSearchAll" />
         <activity android:name=".AdvanceOrder" />
+        <activity android:name=".Shop"></activity>
         <activity android:name=".OrderConfirmMain" />
         <activity android:name=".MapSearched" />
 
@@ -51,6 +52,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>
