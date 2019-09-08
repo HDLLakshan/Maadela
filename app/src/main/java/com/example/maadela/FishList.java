@@ -66,10 +66,10 @@ public class FishList extends ArrayAdapter<DailySelling> {
 
         System.out.println("Time in minutes: " + diffMinutes + " minutes.");
         System.out.println("Time in hours: " + diffHours + " hours.");
-       // name.setText( dailySelling.getFishname() );
+        name.setText( dailySelling.getFishname() );
         rate.setText( "Rs "+new Double(dailySelling.getRate()).toString()+"/kg" );
         time.setText( (int) diffHours +":Hrs "+ diffMinutes + ":Min   Ago" );
-        name.setText( "laka" );
+       // name.setText( "laka" );
 ;
 
 

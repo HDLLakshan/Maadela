@@ -3,6 +3,7 @@ package com.example.maadela;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,10 +35,11 @@ public class Shop extends Activity {
     ListView listviewfish;
     DatabaseReference databaseFish;
     List<DailySelling> fishlist;
-    private String shopname;
-    private String DateShopOpend;
+    private String cusname,shopname;
+    private String DateShopOpend,time;
     EditText input;
     DatabaseReference dbref;
+    Requests requests;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -46,7 +49,10 @@ public class Shop extends Activity {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         DateShopOpend = df.format(c);
-        shopname = "FreshFish";
+        cusname = "Laka";
+        shopname="FreshFish";
+        TextView head = (TextView)findViewById( R.id.header );
+        head.setText( shopname );
         databaseFish = FirebaseDatabase.getInstance().getReference("DailySelling").child(DateShopOpend).child(shopname);
         listviewfish = (ListView)findViewById( R.id.fishslist );
         fishlist = new ArrayList<>(  );
@@ -90,24 +96,23 @@ public class Shop extends Activity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder( this );
 
-        builder.setTitle( "Delete or Update Rate" );
+        builder.setTitle( "Request For Reserved For 1 Hour" );
         builder.setMessage( "Fish Name :"+fishlist.get( i ).getFishname()+" \n " +"Rate");
         builder.setCancelable( false );
         input = new EditText( this );
         input.setPadding( 20,0,0,0  );
         builder.setView( input );
         input.setText( Double.toString( fishlist.get( i ).getRate()) );
-        builder.setPositiveButton( "Delete Fish Item", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton( "Request", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                delete( j );
-                recreate();
+              String s = input.getText().toString().trim();
+              sendrequest( j,s );
             }
-        } ).setNegativeButton( "Update Rate", new DialogInterface.OnClickListener() {
+        } ).setNegativeButton( "Cancle", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                update( j, Double.parseDouble(input.getText().toString().trim()) );
-                dialogInterface.dismiss();
+
 
             }
         } );
@@ -120,58 +125,39 @@ public class Shop extends Activity {
         pbutton.setBackgroundColor( Color.RED);
     }
 
-    public void update(final int j, final double d){
-        final String m = fishlist.get( j ).getDate();
-       // System.out.println( fishlist.get( j ).getId()+"ppppppppppppppp" );
-        DatabaseReference upref = FirebaseDatabase.getInstance().getReference().child("DailySelling");
-        upref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(m)) {
-                    try {
-                        fishlist.get( j ).setRate( d );
 
-                        dbref = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(fishlist.get( j ).getDate()).child( fishlist.get( j ).getShopName()).child( fishlist.get( j ).getId() );
-                        dbref.setValue(fishlist.get( j ));
-                        recreate();
-                        Toast.makeText(getApplicationContext(), "Update Sucessfull",Toast.LENGTH_SHORT).show();
 
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(getApplicationContext(), "Update Unsucesssfull",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-        });
+    public void sendrequest(int i,String d){
+        time = new SimpleDateFormat("HH:mm").format(new Date());
+
+        requests = new Requests();
+
+        requests.setFid( fishlist.get( i ).getId() );
+        requests.setFishname( fishlist.get( i ).getFishname() );
+        requests.setShopname( fishlist.get( i ).getShopName() );
+        requests.setTime( d );
+        requests.setCusname( cusname );
+        requests.setTime( time );
+        requests.setAmount( "5kg" );
+        requests.setStatus( "Pending" );
+        dbref = FirebaseDatabase.getInstance().getReference().child("Request").child( fishlist.get( i ).getDate() );
+
+       // dbref.push().setValue(requests);
+        DatabaseReference  newref     = dbref.push();
+        String pushid = newref.getKey();
+        requests.setReqid( pushid );
+        newref.setValue( requests );
+
+        Toast.makeText(getApplicationContext(), "Data Save Succesfull",Toast.LENGTH_SHORT).show();
 
 
     }
 
-    public void delete(final int i){
-        final String m = fishlist.get( i ).getDate();
-        DatabaseReference delref = FirebaseDatabase.getInstance().getReference().child("DailySelling");
-        delref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChild(m)){
-                    dbref=FirebaseDatabase.getInstance().getReference().child("DailySelling").child(fishlist.get( i ).getDate()).child(fishlist.get( i ).getShopName()).child( fishlist.get( i ).getId());
-                    dbref.removeValue();
-                    //clearcontrol();
-                    Toast.makeText(getApplicationContext(), "DeleteSucessfull",Toast.LENGTH_SHORT).show();
-                }else
-                    Toast.makeText(getApplicationContext(), "Delete Un Sucessfull",Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public void gonotification(View view){
+        Intent intent = new Intent(this,SendRequest.class );
+        startActivity( intent );
     }
-
-
 
 }

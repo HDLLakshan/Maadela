@@ -74,39 +74,7 @@ public class SearchNavi extends Activity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener( this );
 
-        //Dislpay a toast when update db
 
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        final String DateShopOpend = df.format(c);
-         String TimeShopOpend = new SimpleDateFormat("HH:mm").format(new Date());
-
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-        DatabaseReference reference = firebaseDatabase.getReference();
-        reference.child( "DailySelling" ).child( DateShopOpend ).addValueEventListener( new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-
-                        for(DataSnapshot child:children){
-                           // DailySelling dailySelling = child.getValue(DailySelling.class);
-//                            String shopname = dataSnapshot.child( DateShopOpend ).getValue().toString();
-
-                          //  Toast.makeText( SearchNavi.this,"New Shop Opend", Toast.LENGTH_LONG).show();
-                            NotificationManager notif=(NotificationManager)getSystemService( Context.NOTIFICATION_SERVICE);
-                            Notification notify=new Notification.Builder
-                                    (getApplicationContext()).setContentTitle("New Shop Opend").setContentText(DateShopOpend).setSmallIcon(R.drawable.icon).build();
-
-                            notify.flags |= Notification.FLAG_AUTO_CANCEL;
-                            notif.notify(0, notify);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                } );
 
 
     }

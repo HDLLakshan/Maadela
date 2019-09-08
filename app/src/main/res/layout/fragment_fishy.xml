@@ -148,7 +148,7 @@
         app:layout_constraintTop_toBottomOf="@+id/ContactNo" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/status"
         android:layout_width="129dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -179,7 +179,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView7"
+        app:layout_constraintStart_toEndOf="@+id/status"
         app:layout_constraintTop_toBottomOf="@+id/Amount" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
