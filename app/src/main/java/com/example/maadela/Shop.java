@@ -143,6 +143,7 @@ public class Shop extends Activity {
         requests.setStatus( "Pending" );
         dbref = FirebaseDatabase.getInstance().getReference().child("Request").child( fishlist.get( i ).getDate() );
 
+
        // dbref.push().setValue(requests);
         DatabaseReference  newref     = dbref.push();
         String pushid = newref.getKey();

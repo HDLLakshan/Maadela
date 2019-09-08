@@ -63,6 +63,8 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_searched);
         getLocationPermission();
+        listfish = new ArrayList<String>();
+        fish = new Fish();
     }
 
     public void onMapReady(GoogleMap gm) {
@@ -127,8 +129,12 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
 
     public void setList(String ID){
-        listfish = new ArrayList<>();
-        fish = new Fish();
+        try {
+            listfish.clear();
+        }catch (Exception e){
+
+        }
+
         Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
         dbshop = FirebaseDatabase.getInstance().getReference().child("Shop&Types").child(ID).child("listFish");
 
@@ -136,24 +142,33 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 for(int i=0;i<dataSnapshot.getChildrenCount();i++) {
                     fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
                     fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
                     listfish.add(fish.toString());
+                  //  System.out.println(listfish.get( 0 ));
                     Toast.makeText(getApplicationContext(), listfish.get(i), Toast.LENGTH_SHORT).show();
                 }
+                listView = findViewById(R.id.listView);
+                AA = new ArrayAdapter<String>(MapsSearchAll.this,android.R.layout.simple_expandable_list_item_1, listfish);
+                listView.setAdapter(AA);
+
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
 
-        listView = findViewById(R.id.listView);
-        AA = new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1, listfish);
-        listView.setAdapter(AA);
+
+
+
+
 
 
     }
+
 
 
 
