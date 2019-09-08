@@ -6,8 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MapsSearchAll"
     app:umanoDragView="@id/dragview"
-    app:umanoScrollableView="@id/ListView"
+    app:umanoScrollableView="@id/listView"
+    android:layout_gravity="bottom"
     android:gravity="bottom"
+    app:umanoPanelHeight="68dp"
+    app:umanoOverlay="false"
+    app:umanoParallaxOffset="100dp"
+    app:umanoShadowHeight="4dp"
     >
 
 <RelativeLayout
@@ -37,26 +42,32 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="50dp">
+
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/shopname"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="16sp"
-                android:text="Action"/>
-
-
+                android:fontFamily="sans-serif-smallcaps"
+                android:paddingTop="16sp"
+                android:text="SHOP"
+                android:textAlignment="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:typeface="sans" />
         </RelativeLayout>
-        
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:id="@+id/ListView">
+            android:id="@+id/listView">
 
         </ListView>
 
-        
+
 
 
     </LinearLayout>
