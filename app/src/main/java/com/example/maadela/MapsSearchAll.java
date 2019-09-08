@@ -107,7 +107,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
                     LatLng marker = new LatLng(lat, lng);
                     String title = dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString();
 
-                    MMap.addMarker(new MarkerOptions().position(marker).title(title)).setTag(dataSnapshot.child(String.valueOf(i)).child("ID").getValue().toString());
+                    MMap.addMarker(new MarkerOptions().position(marker).title(title)).setTag(dataSnapshot.child(String.valueOf(i)).child("id").getValue().toString());
                 }
             }
 
@@ -147,7 +147,6 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
                     fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
                     fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
                     listfish.add(fish.toString());
-                  //  System.out.println(listfish.get( 0 ));
                     Toast.makeText(getApplicationContext(), listfish.get(i), Toast.LENGTH_SHORT).show();
                 }
                 listView = findViewById(R.id.listView);
@@ -160,12 +159,6 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-
-
-
-
-
-
 
     }
 
