@@ -39,7 +39,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -56,7 +59,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     ArrayAdapter<String> AA;
     ArrayList<String> listfish;
     Fish fish;
-
+    String DateShopOpend;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +67,10 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_map_searched);
         getLocationPermission();
         listfish = new ArrayList<String>();
-        fish = new Fish();
+     //   fish = new Fish();
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        DateShopOpend = df.format(c);
     }
 
     public void onMapReady(GoogleMap gm) {
@@ -93,21 +99,46 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
     public void showAll(){
         MMap.setOnMarkerClickListener(this);
-        dbRef = FirebaseDatabase.getInstance().getReference().child("location");
+        dbRef = FirebaseDatabase.getInstance().getReference().child("DailySelling").child( DateShopOpend );
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(int i=1;i<=dataSnapshot.getChildrenCount();i++) {
+                for(DataSnapshot fishSnapshot : dataSnapshot.getChildren()){
+                    final String n = fishSnapshot.getKey();
+                    System.out.println("========="+n);
                     //Toast.makeText(getApplicationContext(), dataSnapshot.child(String.valueOf(i)).child("ID").getValue().toString(), Toast.LENGTH_SHORT).show();
 
-                    Double lat = Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lan").getValue().toString());
-                    Double lng = Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lon").getValue().toString());
+                    DatabaseReference rf = FirebaseDatabase.getInstance().getReference().child( "location" );
+                    rf.addListenerForSingleValueEvent( new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot fish1Snapshot : dataSnapshot.getChildren()) {
+                              LocationAll l = fish1Snapshot.getValue(LocationAll.class);
 
-                    LatLng marker = new LatLng(lat, lng);
-                    String title = dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString();
+                              if(l.getName().equals( n )) {
 
-                    MMap.addMarker(new MarkerOptions().position(marker).title(title)).setTag(dataSnapshot.child(String.valueOf(i)).child("ID").getValue().toString());
+
+                                  // Double lat = Double.parseDouble( fish1Snapshot.child( "1" ).child( "lan" ).getValue().toString() );
+                                  /// Double lng = Double.parseDouble( fish1Snapshot.child( "1" ).child( "lon" ).getValue().toString() );
+
+                                  Double lat = l.getLan();
+                                  Double lng = l.getLon();
+                                  LatLng marker = new LatLng( lat, lng );
+                                  // String title = fish1Snapshot.child( String.valueOf( 1 ) ).child( "name" ).getValue().toString();
+                                  String title = l.getName();
+
+                                  MMap.addMarker( new MarkerOptions().position( marker ).title( title ) ).setTag( l.getID() );
+                              }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    } );
+
                 }
             }
 
@@ -136,19 +167,20 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         }
 
         Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
-        dbshop = FirebaseDatabase.getInstance().getReference().child("Shop&Types").child(ID).child("listFish");
+        dbshop = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpend).child("Fish-Market");
 
         dbshop.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(int i=0;i<dataSnapshot.getChildrenCount();i++) {
-                    fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
-                    fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
-                    listfish.add(fish.toString());
+                for(DataSnapshot fishSnapshot : dataSnapshot.getChildren())  {
+                  DailySelling  fish1 = fishSnapshot.getValue(DailySelling.class);
+                   // fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
+                  //  fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
+                 listfish.add(fish1.toString());
                   //  System.out.println(listfish.get( 0 ));
-                    Toast.makeText(getApplicationContext(), listfish.get(i), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), listfish.get(0), Toast.LENGTH_SHORT).show();
                 }
                 listView = findViewById(R.id.listView);
                 AA = new ArrayAdapter<String>(MapsSearchAll.this,android.R.layout.simple_expandable_list_item_1, listfish);

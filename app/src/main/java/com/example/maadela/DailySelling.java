@@ -67,6 +67,8 @@ public class DailySelling {
     @NonNull
     @Override
     public String toString() {
-        return ShopName + " " + date ;
+        return
+                Fishname + ":\t\t\t" +
+                        "Rs: " + rate ;
     }
 }

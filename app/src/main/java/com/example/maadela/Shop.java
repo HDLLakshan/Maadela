@@ -53,7 +53,7 @@ public class Shop extends Activity {
         shopname="FreshFish";
         TextView head = (TextView)findViewById( R.id.header );
         head.setText( shopname );
-        databaseFish = FirebaseDatabase.getInstance().getReference("DailySelling").child(DateShopOpend).child(shopname);
+        databaseFish = FirebaseDatabase.getInstance().getReference("DailySelling").child(DateShopOpend).child(shopname) ;
         listviewfish = (ListView)findViewById( R.id.fishslist );
         fishlist = new ArrayList<>(  );
 
