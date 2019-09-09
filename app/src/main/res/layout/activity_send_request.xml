@@ -8,12 +8,14 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="298dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="28dp"
-        android:text="Send Requests"
+        android:layout_width="349dp"
+        android:layout_height="81dp"
+        android:layout_marginTop="24dp"
+        android:text="All Send One Hour Reservation Requests"
+        android:textColor="@color/colorPrimary"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.592"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,8 +23,10 @@
         android:id="@+id/rlist"
         android:layout_width="344dp"
         android:layout_height="397dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

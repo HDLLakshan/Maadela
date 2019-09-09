@@ -39,7 +39,7 @@ public class SendRequest extends Activity {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         DateShopOpend = df.format(c);
         shopname = "FreshFish";
-        user="Laka";
+        user="Lakshan";
         requestsList = new ArrayList<>(  );
         listViewRequest = (ListView)findViewById( R.id.rlist );
         dbref = FirebaseDatabase.getInstance().getReference("Request").child(DateShopOpend);
