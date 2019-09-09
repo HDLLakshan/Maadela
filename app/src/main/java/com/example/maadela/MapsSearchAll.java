@@ -128,7 +128,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
                                   // String title = fish1Snapshot.child( String.valueOf( 1 ) ).child( "name" ).getValue().toString();
                                   String title = l.getName();
 
-                                  MMap.addMarker( new MarkerOptions().position( marker ).title( title ) ).setTag( l.getID() );
+                                  MMap.addMarker( new MarkerOptions().position( marker ).title( title ) ).setTag( l.getName() );
                               }
                             }
                         }
@@ -167,7 +167,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         }
 
         Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
-        dbshop = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpend).child("Fish-Market");
+        dbshop = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpend).child(ID);
 
         dbshop.addListenerForSingleValueEvent(new ValueEventListener() {
 
