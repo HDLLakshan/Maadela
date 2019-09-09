@@ -7,10 +7,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -60,6 +62,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     ArrayList<String> listfish;
     Fish fish;
     String DateShopOpend;
+    String name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -154,10 +157,10 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     public boolean onMarkerClick(final Marker marker) {
         Toast.makeText(getApplicationContext(), marker.getTag().toString(), Toast.LENGTH_SHORT).show();
         setList(marker.getTag().toString());
+        name = marker.getTag().toString();
         return false;
     }
     String[] fishs = new String[100];
-
 
     public void setList(String ID){
         try {
@@ -202,8 +205,6 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-
-
     public void showPlace(final String FishType){
         dbRef = FirebaseDatabase.getInstance().getReference().child("location");
 
@@ -228,7 +229,6 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
         Toast.makeText(getApplicationContext(), "All locations are loaded", Toast.LENGTH_SHORT).show();
     }
-
 
     private void getDeviceLocation(){
         Log.d(TAG,"device location");
@@ -317,6 +317,13 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
+    public void gotoShop(View view){
+        Intent intent = new Intent(this, Shop.class);
+        intent.putExtra("name",name);
+        startActivity(intent);
+
+
+    }
 
     private String getURL(LatLng l1,LatLng l2){
         String str_org= "örigin"+ l1.latitude+","+l1.longitude;
