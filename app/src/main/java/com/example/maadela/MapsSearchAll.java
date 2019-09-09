@@ -416,6 +416,4 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     }
 
 
-
-
 }
