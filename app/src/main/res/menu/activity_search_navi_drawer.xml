@@ -11,15 +11,15 @@
         <item
             android:id="@+id/nav_gallery"
 
-            android:title="Map" />
+            android:title="All Shops" />
         <item
             android:id="@+id/nav_slideshow"
 
-            android:title="Order" />
+            android:title="Send Reservation Request" />
         <item
             android:id="@+id/nav_tools"
 
-            android:title="Payment" />
+            android:title="Send Order Request" />
     </group>
 
     <item android:title="Communicate">

@@ -169,7 +169,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
         }
 
-        Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
         dbshop = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpend).child(ID);
 
         dbshop.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -183,7 +183,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
                   //  fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
                  listfish.add(fish1.toString());
                   //  System.out.println(listfish.get( 0 ));
-                    Toast.makeText(getApplicationContext(), listfish.get(0), Toast.LENGTH_SHORT).show();
+                 //   Toast.makeText(getApplicationContext(),fish1.getFishname(), Toast.LENGTH_SHORT).show();
                 }
                 listView = findViewById(R.id.listView);
                 AA = new ArrayAdapter<String>(MapsSearchAll.this,android.R.layout.simple_expandable_list_item_1, listfish);
@@ -318,10 +318,13 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     }
 
     public void gotoShop(View view){
-        Intent intent = new Intent(this, Shop.class);
-        intent.putExtra("name",name);
-        startActivity(intent);
-
+        if(name==null)
+            Toast.makeText( getApplicationContext(),"Select Shop On Map",Toast.LENGTH_SHORT ).show();
+        else {
+            Intent intent = new Intent( this, Shop.class );
+            intent.putExtra( "name", name );
+            startActivity( intent );
+        }
 
     }
 

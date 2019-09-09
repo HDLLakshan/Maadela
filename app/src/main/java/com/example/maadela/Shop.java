@@ -49,8 +49,11 @@ public class Shop extends Activity {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         DateShopOpend = df.format(c);
-        cusname = "Laka";
-        shopname="FreshFish";
+
+        cusname = "Lakshan";
+        Intent i = getIntent();
+        shopname= i.getStringExtra( "name" );
+
         TextView head = (TextView)findViewById( R.id.header );
         head.setText( shopname );
         databaseFish = FirebaseDatabase.getInstance().getReference("DailySelling").child(DateShopOpend).child(shopname) ;

@@ -120,9 +120,11 @@ public class SearchNavi extends Activity
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-            Intent intent = new Intent(this, MapLoc.class);
+            Intent intent = new Intent(this, MapsSearchAll.class);
             startActivity(intent);
-        } else if (id == R.id.nav_tools) {
+        } else if (id == R.id.nav_slideshow) {
+            Intent intent = new Intent(this, SendRequest.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 
@@ -136,12 +138,12 @@ public class SearchNavi extends Activity
     }
 
     public void sendMessage(View view) {
-        Intent intent = new Intent(this, MapSearched.class);
+        Intent intent = new Intent(this, MapsSearchAll.class);
         startActivity(intent);
     }
 
     public void sendOrderMessage(View view) {
-        Intent intent = new Intent(this,Shop.class);
+        Intent intent = new Intent(this,AdvanceOrder.class);
         startActivity(intent);
     }
 }
