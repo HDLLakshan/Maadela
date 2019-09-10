@@ -108,8 +108,8 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         MMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
 
         showAll();
-        MMap.addMarker(place1);
-        MMap.addMarker(place2);
+        //MMap.addMarker(place1);
+       // MMap.addMarker(place2);
 
 
         getDeviceLocation();
