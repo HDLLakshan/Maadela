@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         handler.postDelayed( new Runnable() {
             @Override
             public void run() {
-               Intent intent = new Intent( MainActivity.this, signup.class );
+               Intent intent = new Intent( MainActivity.this, Login.class );
                startActivity(intent);
                 finish();
             }

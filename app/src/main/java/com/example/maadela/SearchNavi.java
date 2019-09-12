@@ -45,7 +45,10 @@ import java.util.Date;
 public class SearchNavi extends Activity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    DatabaseReference dbref;
+    User us;
     private Button btn;
+    String n;
        private static final String[] Fish = new String[]{"Balaya","Thora","Thalmaha","Tuuna"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,7 @@ public class SearchNavi extends Activity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener( this );
 
-
+         n="Laka";
 
 
     }
@@ -130,6 +133,8 @@ public class SearchNavi extends Activity
 
         } else if (id == R.id.nav_send) {
 
+        }else if(id == R.id.logout){
+
         }
 
         DrawerLayout drawer = findViewById( R.id.drawer_layout );
@@ -146,4 +151,35 @@ public class SearchNavi extends Activity
         Intent intent = new Intent(this,AdvanceOrder.class);
         startActivity(intent);
     }
+
+    public void logout(View view){
+         DatabaseReference updRef = FirebaseDatabase.getInstance().getReference().child("User");
+        updRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(n)) {
+                    us = dataSnapshot.child(n).getValue(User.class);
+                    try {
+
+                      us.setStatus(false);
+                        dbref = FirebaseDatabase.getInstance().getReference().child("User").child(n);
+                        dbref.setValue(us);
+                        Toast.makeText(getApplicationContext(), "Data updated successfully", Toast.LENGTH_SHORT).show();
+
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(getApplicationContext(), "invalid", Toast.LENGTH_SHORT).show();
+                    }
+                } else
+                    Toast.makeText(getApplicationContext(), "No sourse to update", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 }

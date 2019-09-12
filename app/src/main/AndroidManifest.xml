@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.maadela">
-    <!--
-         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
-         Google Maps Android API v2, but you must specify either coarse or fine
-         location permissions for the 'MyLocation' functionality.
-    -->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,16 +9,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SendRequest"></activity>
+        <activity android:name=".profile"></activity>
+        <activity android:name=".Login" />
+        <activity android:name=".SendRequest" />
         <activity android:name=".MapsSearchAll" />
         <activity android:name=".AdvanceOrder" />
         <activity android:name=".Shop" />
         <activity android:name=".OrderConfirmMain" />
         <activity android:name=".MapSearched" />
-
         <activity android:name=".MapLoc" />
         <activity android:name=".signup" />
-
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
@@ -45,13 +41,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4" />
