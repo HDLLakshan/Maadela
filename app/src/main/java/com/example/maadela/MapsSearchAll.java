@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -45,8 +48,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
-public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+
+public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener , TaskLoadedCallback {
 
     private static final String TAG = "MapActivity";
     private static final String FiLo = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -63,6 +68,11 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     Fish fish;
     String DateShopOpend;
     String name;
+    String[] fishs = new String[100];
+    Polyline currentPolyline;
+    String url;
+    MarkerOptions place1,place2;
+    Button btn;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,10 +80,24 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         setContentView(R.layout.activity_map_searched);
         getLocationPermission();
         listfish = new ArrayList<String>();
-     //   fish = new Fish();
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         DateShopOpend = df.format(c);
+
+        //direction
+        btn = findViewById(R.id.dir);
+        place1 = new MarkerOptions().position(new LatLng(7.348639,80.133075)).title("loc1");
+        place2 = new MarkerOptions().position(new LatLng(7.275326,79.975371)).title("loc1");
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                url = getURL(place1.getPosition(),place2.getPosition());
+                new FetchURL(MapsSearchAll.this).execute(url,"driving");
+
+            }
+        });
+
     }
 
     public void onMapReady(GoogleMap gm) {
@@ -84,6 +108,8 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         MMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
 
         showAll();
+        //MMap.addMarker(place1);
+       // MMap.addMarker(place2);
 
 
         getDeviceLocation();
@@ -160,7 +186,6 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         name = marker.getTag().toString();
         return false;
     }
-    String[] fishs = new String[100];
 
     public void setList(String ID){
         try {
@@ -329,24 +354,24 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private String getURL(LatLng l1,LatLng l2){
-        String str_org= "örigin"+ l1.latitude+","+l1.longitude;
+        String str_org= "origin="+ l1.latitude+","+l1.longitude;
 
-        String str_dest = "destination=1"+ l2.latitude+","+l2.longitude;
+        String str_dest = "destination="+ l2.latitude+","+l2.longitude;
 
-        String sensor ="sensor=false";
 
         String mode="mode=driving";
 
-        String param = str_org+"&"+str_dest+"&"+sensor+"&"+mode;
+        String param = str_org+"&"+str_dest+"&"+mode;
 
         String output = "json";
 
-        String URL="https://maps.googleapis.com/maps/api/directions/"+ output+"?"+param;
 
+        String URL="https://maps.googleapis.com/maps/api/directions/"+ output+"?"+param+"&key=AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4";
+        System.out.println(URL);
         return URL;
     }
 
-    private String requestDirection(String requrl) throws IOException {
+    private String  requestDirection(String requrl) throws IOException {
         String respose="";
         InputStream is=null;
         HttpURLConnection uc= null;
@@ -382,6 +407,13 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
     }
 
+    @Override
+    public void onTaskDone(Object... values){
+        if(currentPolyline!= null){
+            currentPolyline.remove();
+            currentPolyline = MMap.addPolyline((PolylineOptions) values[0]);
+        }
+    }
 
 
 }
