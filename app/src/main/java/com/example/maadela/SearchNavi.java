@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -48,13 +49,16 @@ public class SearchNavi extends Activity
     DatabaseReference dbref;
     User us;
     private Button btn;
-    String n;
+    String username;
        private static final String[] Fish = new String[]{"Balaya","Thora","Thalmaha","Tuuna"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         requestWindowFeature( Window.FEATURE_NO_TITLE );
         setContentView( R.layout.activity_search_navi );
+
+        SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        username = sharedPreferences.getString( "username","" );
         btn= (Button)findViewById( R.id.search );
         AutoCompleteTextView et = findViewById( R.id.fishname );
         ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,Fish );
@@ -77,7 +81,7 @@ public class SearchNavi extends Activity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener( this );
 
-         n="Laka";
+
 
 
     }
@@ -134,7 +138,9 @@ public class SearchNavi extends Activity
         } else if (id == R.id.nav_send) {
 
         }else if(id == R.id.logout){
-
+           logout();
+           Intent intent = new Intent( this,Login.class );
+           startActivity( intent );
         }
 
         DrawerLayout drawer = findViewById( R.id.drawer_layout );
@@ -152,19 +158,19 @@ public class SearchNavi extends Activity
         startActivity(intent);
     }
 
-    public void logout(View view){
+    public void logout(){
          DatabaseReference updRef = FirebaseDatabase.getInstance().getReference().child("User");
         updRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(n)) {
-                    us = dataSnapshot.child(n).getValue(User.class);
+                if (dataSnapshot.hasChild(username)) {
+                    us = dataSnapshot.child(username).getValue(User.class);
                     try {
 
                       us.setStatus(false);
-                        dbref = FirebaseDatabase.getInstance().getReference().child("User").child(n);
+                        dbref = FirebaseDatabase.getInstance().getReference().child("User").child(username);
                         dbref.setValue(us);
-                        Toast.makeText(getApplicationContext(), "Data updated successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Log Out successfully", Toast.LENGTH_SHORT).show();
 
                     } catch (NumberFormatException e) {
                         Toast.makeText(getApplicationContext(), "invalid", Toast.LENGTH_SHORT).show();

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Window;
 import android.widget.ListView;
@@ -27,7 +29,7 @@ public class SendRequest extends Activity {
     ListView listViewRequest;
     List<Requests> requestsList;
 
-    String DateShopOpend,shopname,user;
+    String DateShopOpend,user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +40,9 @@ public class SendRequest extends Activity {
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         DateShopOpend = df.format(c);
-        shopname = "FreshFish";
-        user="Lakshan";
+        SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        user = sharedPreferences.getString("username", "");
+
         requestsList = new ArrayList<>(  );
         listViewRequest = (ListView)findViewById( R.id.rlist );
         dbref = FirebaseDatabase.getInstance().getReference("Request").child(DateShopOpend);
@@ -61,7 +64,7 @@ public class SendRequest extends Activity {
                     RequestList adapter = new RequestList( SendRequest.this, requestsList );
                     listViewRequest.setAdapter( adapter );
                 }catch (Exception e){
-                    System.out.println( "errrrooo" );
+                    System.out.println( "errrro" );
                 }
 
 

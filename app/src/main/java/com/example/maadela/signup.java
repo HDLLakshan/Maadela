@@ -2,7 +2,9 @@ package com.example.maadela;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -69,6 +71,14 @@ public class signup extends AppCompatActivity {
                     // dbref.push().setValue(us);
                     dbref.child(us.getName()).setValue(us);
                     Toast.makeText(getApplicationContext(), "Data saved successfully", Toast.LENGTH_SHORT).show();
+
+                    SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+
+                    editor.putString( "username", us.getName() );
+                    editor.commit();
+
+
 
                     Intent intent1 = new Intent(signup.this, MapLoc.class);
                     intent1.putExtra("name", us.getName());

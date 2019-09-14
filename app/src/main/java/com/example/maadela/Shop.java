@@ -2,8 +2,10 @@ package com.example.maadela;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -50,7 +52,9 @@ public class Shop extends Activity {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         DateShopOpend = df.format(c);
 
-        cusname = "Lakshan";
+        SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        cusname = sharedPreferences.getString("username", "");
+
         Intent i = getIntent();
         shopname= i.getStringExtra( "name" );
 

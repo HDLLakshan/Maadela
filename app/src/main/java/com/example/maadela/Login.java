@@ -38,6 +38,7 @@ public class Login extends AppCompatActivity implements TextWatcher, OnCheckedCh
     private static final String KEY_REMEMBER = "remember";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_PASS = "password";
+    User us;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class Login extends AppCompatActivity implements TextWatcher, OnCheckedCh
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.hasChild(name)) {
                             if (pw.equals(dataSnapshot.child(name).child("password").getValue().toString())) {
+                                login();
                                 Intent intent4 = new Intent(Login.this, MapLoc.class);
                                 intent4.putExtra("name", name);
                                 startActivity(intent4);
@@ -133,10 +135,40 @@ public class Login extends AppCompatActivity implements TextWatcher, OnCheckedCh
         else{
             editor.putBoolean(KEY_REMEMBER,false);
             editor.remove(KEY_PASS);
-            editor.remove(KEY_USERNAME);
+          //  editor.remove(KEY_USERNAME);
             editor.apply();
         }
 
+    }
+
+    public void login(){
+        DatabaseReference updRef = FirebaseDatabase.getInstance().getReference().child("User");
+        updRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(e1.getText().toString())) {
+                    us = dataSnapshot.child(e1.getText().toString()).getValue(User.class);
+                    System.out.println( "laslaslasdl"+ us.isStatus() );
+                    try {
+
+                        us.setStatus(true);
+                        dbref = FirebaseDatabase.getInstance().getReference().child("User").child(e1.getText().toString());
+                        dbref.setValue(us);
+                        Toast.makeText(getApplicationContext(), "Log Out successfully", Toast.LENGTH_SHORT).show();
+
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(getApplicationContext(), "invalid", Toast.LENGTH_SHORT).show();
+                    }
+                } else
+                    Toast.makeText(getApplicationContext(), "No sourse to update", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 
