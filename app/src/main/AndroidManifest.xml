@@ -9,13 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".profile"></activity>
+        <activity android:name=".ViewSentOrders"></activity>
+        <activity android:name=".OrderSendNotify" />
+        <activity android:name=".profile" />
         <activity android:name=".Login" />
         <activity android:name=".SendRequest" />
         <activity android:name=".MapsSearchAll" />
         <activity android:name=".AdvanceOrder" />
         <activity android:name=".Shop" />
-        <activity android:name=".OrderConfirmMain" />
         <activity android:name=".MapSearched" />
         <activity android:name=".MapLoc" />
         <activity android:name=".signup" />
