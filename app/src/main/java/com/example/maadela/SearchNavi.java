@@ -33,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -63,6 +64,22 @@ public class SearchNavi extends Activity
         AutoCompleteTextView et = findViewById( R.id.fishname );
         ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,Fish );
         et.setAdapter( adapter );
+
+        et.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent in = new Intent( SearchNavi.this,MapsSearchAll.class );
+
+                in.putExtra( "fishname",Fish[i] );
+                startActivity( in );
+                finish();
+            }
+        } );
+
+
+
+
+
         Toolbar toolbar = findViewById( R.id.toolbar );
        //  setSupportActionBar( toolbar );
         FloatingActionButton fab = findViewById( R.id.fab );
@@ -134,6 +151,7 @@ public class SearchNavi extends Activity
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
+            //Intent intent = new Intent( t )
 
         } else if (id == R.id.nav_send) {
 
