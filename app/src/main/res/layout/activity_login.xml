@@ -21,12 +21,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.068" />
+        app:layout_constraintVertical_bias="0.112" />
 
     <EditText
         android:id="@+id/editText17"
         android:layout_width="331dp"
-        android:layout_height="44dp"
+        android:layout_height="55dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
@@ -37,7 +37,7 @@
         app:layout_constraintHorizontal_bias="0.609"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.267" />
+        app:layout_constraintVertical_bias="0.31" />
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -52,42 +52,43 @@
         app:layout_constraintHorizontal_bias="0.899"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.476" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <Button
         android:id="@+id/button3"
-        android:layout_width="125dp"
-        android:layout_height="65dp"
+        android:layout_width="119dp"
+        android:layout_height="58dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="SIGN IN"
+        android:background="@color/common_google_signin_btn_text_dark_default"
+        android:text="Login"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.597" />
+        app:layout_constraintVertical_bias="0.618" />
 
     <Button
         android:id="@+id/textView9"
-        android:layout_width="125dp"
-        android:layout_height="65dp"
+        android:layout_width="119dp"
+        android:layout_height="60dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:background="@color/common_google_signin_btn_text_dark_default"
         android:text="Sing Up"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.97"
+        app:layout_constraintHorizontal_bias="0.931"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.858" />
+        app:layout_constraintVertical_bias="0.847" />
 
     <EditText
         android:id="@+id/editText18"
         android:layout_width="331dp"
-        android:layout_height="44dp"
+        android:layout_height="55dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -96,14 +97,14 @@
         app:layout_constraintHorizontal_bias="0.587"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.384" />
+        app:layout_constraintVertical_bias="0.42" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="247dp"
-        android:layout_height="51dp"
+        android:layout_width="225dp"
+        android:layout_height="44dp"
         android:text="Don't have an account?"
-        android:textSize="24sp"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.14"

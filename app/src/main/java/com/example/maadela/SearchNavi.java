@@ -151,8 +151,8 @@ public class SearchNavi extends Activity
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
-            //Intent intent = new Intent( t )
-
+            Intent intent = new Intent( this,profile.class );
+            startActivity( intent );
         } else if (id == R.id.nav_send) {
 
         }else if(id == R.id.logout){

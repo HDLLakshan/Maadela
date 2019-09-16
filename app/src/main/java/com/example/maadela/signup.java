@@ -25,7 +25,7 @@ public class signup extends AppCompatActivity {
     DatabaseReference dbref;
     User us;
 
-    private Button btn;
+    private Button btn,go;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class signup extends AppCompatActivity {
         // txtEmail=findViewById(R.id.editText23);
         txtPassword = findViewById(R.id.editText3);
         txtCopassword = findViewById(R.id.editText5);
+        go= findViewById( R.id.textView8 );
 
         us = new User();
 
@@ -94,11 +95,22 @@ public class signup extends AppCompatActivity {
 
 
     });
+
+    go.setOnClickListener( new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent o = new Intent( signup.this,Login.class );
+            startActivity( o );
+        }
+    } );
+
     }
 
 
 
     public void RegCustomer(View view){
 
+
 }
-        }
+
+}
