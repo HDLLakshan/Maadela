@@ -157,7 +157,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
                                   // String title = fish1Snapshot.child( String.valueOf( 1 ) ).child( "name" ).getValue().toString();
                                   String title = l.getName();
 
-                                  MMap.addMarker( new MarkerOptions().position( marker ).title( title ) ).setTag( l.getName() );
+                                  MMap.addMarker( new MarkerOptions().position( marker ).title( title ) ).setTag( l.getName());
                               }
                             }
                         }
