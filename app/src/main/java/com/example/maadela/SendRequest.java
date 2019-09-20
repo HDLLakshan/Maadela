@@ -79,7 +79,12 @@ public class SendRequest extends Activity {
                     listViewRequest.setOnItemClickListener( new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                            Dialogbox( i );
+                            if(requestsList.get( i ).getStatus().equals( "Confirmed" ))
+                                DialogboxCallshop( );
+                            else if(requestsList.get( i ).getStatus().equals( "Sold" ))
+                                DialogboxRateShop( i );
+                            else if(requestsList.get( i ).getStatus().equals( "Pending" ))
+                                DialogboxDelete( i );
                         }
                     } );
 
@@ -98,7 +103,7 @@ public class SendRequest extends Activity {
     }
 
 
-    public void Dialogbox(int i){
+    public void DialogboxDelete(int i){
         final int j = i;
         AlertDialog.Builder builder = new AlertDialog.Builder( this );
 
@@ -112,19 +117,12 @@ public class SendRequest extends Activity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 delete( j );
             }
-        } ).setNegativeButton( "Call Shop", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                startActivity(new Intent( Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
-            }
-        });
+        } );
         AlertDialog alertDialog = builder.create();
         alertDialog.setCanceledOnTouchOutside( true );
         alertDialog.show();
         Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         pbutton.setTextColor( Color.BLACK);
-        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        nbutton.setTextColor( Color.BLACK);
     }
 
 
@@ -148,5 +146,52 @@ public class SendRequest extends Activity {
 
             }
         } );
+    }
+
+    public void DialogboxRateShop(int i){
+        final int j = i;
+        AlertDialog.Builder builder = new AlertDialog.Builder( this );
+
+        builder.setTitle( "Rate Shop" );
+
+
+
+
+        builder.setPositiveButton( "Rate", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent( SendRequest.this,RatingShop.class );
+                System.out.println( requestsList.get( j ).getShopname()+"=========" );
+                intent.putExtra( "sname",requestsList.get( j ).getShopname() );
+                intent.putExtra( "rid",requestsList.get( j ).getReqid() );
+                startActivity( intent );
+            }
+        } );
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside( true );
+        alertDialog.show();
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor( Color.BLACK);
+
+    }
+
+    public void DialogboxCallshop(){
+        AlertDialog.Builder builder = new AlertDialog.Builder( this );
+
+        builder.setTitle( "Shop Details" );
+
+        builder.setMessage( phoneNumber );
+        builder.setPositiveButton( "Call Shop", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                startActivity(new Intent( Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
+            }
+        } );
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside( true );
+        alertDialog.show();
+        Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+        pbutton.setTextColor( Color.BLACK);
     }
 }

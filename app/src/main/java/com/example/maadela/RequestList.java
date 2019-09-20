@@ -55,6 +55,13 @@ public class RequestList extends ArrayAdapter<Requests> {
         if(requests.getStatus().equals( "Pending" ))
             sts.setText(requests.getStatus());
 
+        if(requests.getStatus().equals( "Sold" ))
+            sts.setText("Rate Shop  "+requests.getShopname());
+
+        if(requests.getStatus().equals( "Rated" ))
+            sts.setText("Thanks FOr Rating");
+
+
 
         return listviweItem;
     }
