@@ -2,15 +2,19 @@ package com.example.maadela;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,7 +54,9 @@ public class Shop extends Activity {
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         DateShopOpend = df.format(c);
 
-        cusname = "Lakshan";
+        SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        cusname = sharedPreferences.getString("username", "");
+
         Intent i = getIntent();
         shopname= i.getStringExtra( "name" );
 
@@ -100,12 +106,22 @@ public class Shop extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder( this );
 
         builder.setTitle( "Request For Reserved For 1 Hour" );
-        builder.setMessage( "Fish Name :"+fishlist.get( i ).getFishname()+" \n " +"Rate");
+        builder.setMessage( "Fish Name :"+fishlist.get( i ).getFishname()+" \n " +"Rate :"+ fishlist.get( i ).getRate());
         builder.setCancelable( false );
-        input = new EditText( this );
-        input.setPadding( 20,0,0,0  );
-        builder.setView( input );
-        input.setText( Double.toString( fishlist.get( i ).getRate()) );
+        final EditText input = new EditText(this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        input.setLayoutParams(lp);
+        input.setHint("Enter Amount (Kg)" );
+        input.setInputType( InputType.TYPE_CLASS_NUMBER );
+        builder.setView(input);
+        //input = new EditText( this );
+        //input.setPadding( 300,10,0,0  );
+        //input.setWidth( 10 );
+        //input.setHeight( 10 );
+        //builder.setView( input );
+        //input.setText( Double.toString( fishlist.get( i ).getRate()) );
         builder.setPositiveButton( "Request", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -123,9 +139,9 @@ public class Shop extends Activity {
         alertDialog.setCanceledOnTouchOutside( true );
         alertDialog.show();
         Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-        nbutton.setBackgroundColor( Color.GREEN);
+        nbutton.setTextColor( Color.BLACK);
         Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
-        pbutton.setBackgroundColor( Color.RED);
+        pbutton.setTextColor( Color.BLACK);
     }
 
 
@@ -139,10 +155,9 @@ public class Shop extends Activity {
         requests.setFid( fishlist.get( i ).getId() );
         requests.setFishname( fishlist.get( i ).getFishname() );
         requests.setShopname( fishlist.get( i ).getShopName() );
-        requests.setTime( d );
         requests.setCusname( cusname );
         requests.setTime( time );
-        requests.setAmount( "5kg" );
+        requests.setAmount( d );
         requests.setStatus( "Pending" );
         dbref = FirebaseDatabase.getInstance().getReference().child("Request").child( fishlist.get( i ).getDate() );
 

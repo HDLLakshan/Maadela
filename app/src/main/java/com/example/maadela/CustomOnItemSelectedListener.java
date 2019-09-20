@@ -8,9 +8,9 @@ public class CustomOnItemSelectedListener  implements AdapterView.OnItemSelected
 
 
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-        Toast.makeText(parent.getContext(),
+      /*  Toast.makeText(parent.getContext(),
                 "Fish type selected : " + parent.getItemAtPosition(pos).toString() + "requested ",
-                Toast.LENGTH_SHORT).show();
+                Toast.LENGTH_SHORT).show();*/
 
     }
 

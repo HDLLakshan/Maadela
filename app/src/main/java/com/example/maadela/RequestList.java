@@ -40,18 +40,20 @@ public class RequestList extends ArrayAdapter<Requests> {
         Requests requests = requestsList.get( position );
 
 
-        if(requests.getStatus().equals( "Confirmed" ))
-            listviweItem.setBackgroundColor( Color.GREEN );
-        if(requests.getStatus().equals( "Reject" ))
-            listviweItem.setBackgroundColor( Color.RED );
-        if(requests.getStatus().equals( "Pending" ))
-            listviweItem.setBackgroundColor( Color.BLUE );
 
         fname.setText( requests.getFishname() );
-        amount.setText( requests.getAmount() );
+        amount.setText( requests.getAmount()+"Kg" );
         cusn.setText( requests.getShopname() );
         rtimed.setText( requests.getTime() );
-        sts.setText(requests.getStatus());
+
+        if(requests.getStatus().equals( "Confirmed" ))
+            sts.setText("Accepted At : "+ requests.getAcctime());
+
+        if(requests.getStatus().equals( "Reject" ))
+            sts.setText("Rejected At : "+requests.getAcctime());
+
+        if(requests.getStatus().equals( "Pending" ))
+            sts.setText(requests.getStatus());
 
 
         return listviweItem;

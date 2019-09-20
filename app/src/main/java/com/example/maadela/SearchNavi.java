@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,6 +33,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -45,17 +47,39 @@ import java.util.Date;
 public class SearchNavi extends Activity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    DatabaseReference dbref;
+    User us;
     private Button btn;
+    String username;
        private static final String[] Fish = new String[]{"Balaya","Thora","Thalmaha","Tuuna"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         requestWindowFeature( Window.FEATURE_NO_TITLE );
         setContentView( R.layout.activity_search_navi );
+
+        SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
+        username = sharedPreferences.getString( "username","" );
         btn= (Button)findViewById( R.id.search );
         AutoCompleteTextView et = findViewById( R.id.fishname );
         ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,Fish );
         et.setAdapter( adapter );
+
+        et.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent in = new Intent( SearchNavi.this,MapsSearchAll.class );
+
+                in.putExtra( "fishname",Fish[i] );
+                startActivity( in );
+                finish();
+            }
+        } );
+
+
+
+
+
         Toolbar toolbar = findViewById( R.id.toolbar );
        //  setSupportActionBar( toolbar );
         FloatingActionButton fab = findViewById( R.id.fab );
@@ -127,9 +151,14 @@ public class SearchNavi extends Activity
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
-
+            Intent intent = new Intent( this,profile.class );
+            startActivity( intent );
         } else if (id == R.id.nav_send) {
 
+        }else if(id == R.id.logout){
+           logout();
+           Intent intent = new Intent( this,Login.class );
+           startActivity( intent );
         }
 
         DrawerLayout drawer = findViewById( R.id.drawer_layout );
@@ -146,4 +175,35 @@ public class SearchNavi extends Activity
         Intent intent = new Intent(this,AdvanceOrder.class);
         startActivity(intent);
     }
+
+    public void logout(){
+         DatabaseReference updRef = FirebaseDatabase.getInstance().getReference().child("User");
+        updRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(username)) {
+                    us = dataSnapshot.child(username).getValue(User.class);
+                    try {
+
+                      us.setStatus(false);
+                        dbref = FirebaseDatabase.getInstance().getReference().child("User").child(username);
+                        dbref.setValue(us);
+                        Toast.makeText(getApplicationContext(), "Log Out successfully", Toast.LENGTH_SHORT).show();
+
+                    } catch (NumberFormatException e) {
+                        Toast.makeText(getApplicationContext(), "invalid", Toast.LENGTH_SHORT).show();
+                    }
+                } else
+                    Toast.makeText(getApplicationContext(), "No sourse to update", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
 }
