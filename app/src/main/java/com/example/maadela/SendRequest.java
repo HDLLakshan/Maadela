@@ -186,6 +186,11 @@ public class SendRequest extends Activity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 startActivity(new Intent( Intent.ACTION_DIAL, Uri.fromParts("tel", phoneNumber, null)));
             }
+        } ).setNegativeButton( "Get Direction ", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Intent intent = new Intent( SendRequest.this, )
+            }
         } );
 
         AlertDialog alertDialog = builder.create();

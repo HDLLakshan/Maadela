@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -85,7 +86,7 @@ public class Shop extends Activity {
                     r.setText( "Rating " + numberAsString );
                 }
                 else
-                    r.setText( "Rating is 0 yet" );
+                    r.setText( "Rating 0 " );
             }
 
             @Override
@@ -120,8 +121,6 @@ public class Shop extends Activity {
 
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        System.out.println("dfsfsd");
-                        //Toast.makeText(getApplicationContext(),fishlist.get( i ).getFishname(),Toast.LENGTH_LONG ).show();
                         sendMessage(i);
                     }
                 } );
@@ -182,8 +181,10 @@ public class Shop extends Activity {
 
     public void sendrequest(int i,String d){
         System.out.println( "nusfsdjsdjgsj"+d );
-        if(d.equals( "" ))
-            Toast.makeText(getApplicationContext(), "Please Enter Amount Kg",Toast.LENGTH_SHORT).show();
+        if(d.equals( "" )) {
+            Toast t = Toast.makeText( getApplicationContext(), "Please Enter Amount Kg", Toast.LENGTH_SHORT );
+            designtoast( t );
+        }
         else {
             time = new SimpleDateFormat( "HH:mm" ).format( new Date() );
 
@@ -204,7 +205,9 @@ public class Shop extends Activity {
             requests.setReqid( pushid );
             newref.setValue( requests );
 
-            Toast.makeText( getApplicationContext(), "Data Save Succesfull", Toast.LENGTH_SHORT ).show();
+           Toast toast = Toast.makeText( getApplicationContext(), "Data Save Succesfull", Toast.LENGTH_SHORT );
+            designtoast( toast );
+
         }
 
 
@@ -250,6 +253,19 @@ public class Shop extends Activity {
             }
         } );
 
+    }
+
+    public void designtoast(Toast toast){
+        toast.setGravity( Gravity.BOTTOM, 0, 0);
+        View view = toast.getView();
+        view.setBackgroundColor(Color.BLACK);
+        TextView text = (TextView) view.findViewById(android.R.id.message);
+
+        //Shadow of the Of the Text Color
+        text.setShadowLayer(0, 0, 0, Color.TRANSPARENT);
+        text.setTextColor(Color.WHITE);
+       // text.setTextSize(12);
+        toast.show();
     }
 
 
