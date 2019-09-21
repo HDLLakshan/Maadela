@@ -51,28 +51,27 @@ import java.util.Date;
 import java.util.HashMap;
 
 
-public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener , TaskLoadedCallback {
+public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, TaskLoadedCallback {
 
     private static final String TAG = "MapActivity";
     private static final String FiLo = Manifest.permission.ACCESS_FINE_LOCATION;
-    private static final String CoLo = Manifest.permission.ACCESS_COARSE_LOCATION ;
+    private static final String CoLo = Manifest.permission.ACCESS_COARSE_LOCATION;
     private static final int Location_re_code = 1234;
-    private Boolean mLocationG = false;
     private GoogleMap MMap;
     private FusedLocationProviderClient FLPC;
-    DatabaseReference dbRef;
-    DatabaseReference dbshop;
+    DatabaseReference dbRef, dbshop, locationDb;
     ListView listView;
     ArrayAdapter<String> AA;
     ArrayList<String> listfish;
-    Fish fish;
     String DateShopOpend;
     String name;
-    String[] fishs = new String[100];
     Polyline currentPolyline;
     String url;
-    MarkerOptions place1,place2;
+    MarkerOptions place1, place2;
     Button btn;
+    LatLng currentLoc;
+    LatLng Destination;
+    boolean mLocationG;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,14 +85,13 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
         //direction
         btn = findViewById(R.id.dir);
-        place1 = new MarkerOptions().position(new LatLng(7.348639,80.133075)).title("loc1");
-        place2 = new MarkerOptions().position(new LatLng(7.275326,79.975371)).title("loc1");
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                url = getURL(place1.getPosition(),place2.getPosition());
-                new FetchURL(MapsSearchAll.this).execute(url,"driving");
+                Toast.makeText(getApplicationContext(), "SWIP DOWN FOR DIRECTION", Toast.LENGTH_SHORT).show();
+                url = getURL(currentLoc, Destination);
+                new FetchURL(MapsSearchAll.this).execute(url, "driving");
 
             }
         });
@@ -108,12 +106,10 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         MMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
 
         showAll();
-        //MMap.addMarker(place1);
-       // MMap.addMarker(place2);
 
 
         getDeviceLocation();
-        if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    Activity#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -126,39 +122,34 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         MMap.setMyLocationEnabled(true);
     }
 
-    public void showAll(){
+    public void showAll() {
         MMap.setOnMarkerClickListener(this);
-        dbRef = FirebaseDatabase.getInstance().getReference().child("DailySelling").child( DateShopOpend );
+        dbRef = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpend);
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot fishSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot fishSnapshot : dataSnapshot.getChildren()) {
                     final String n = fishSnapshot.getKey();
-                    System.out.println("========="+n);
+                    System.out.println("=========" + n);
                     //Toast.makeText(getApplicationContext(), dataSnapshot.child(String.valueOf(i)).child("ID").getValue().toString(), Toast.LENGTH_SHORT).show();
 
-                    DatabaseReference rf = FirebaseDatabase.getInstance().getReference().child( "location" );
-                    rf.addListenerForSingleValueEvent( new ValueEventListener() {
+                    DatabaseReference rf = FirebaseDatabase.getInstance().getReference().child("location");
+                    rf.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot fish1Snapshot : dataSnapshot.getChildren()) {
-                              LocationAll l = fish1Snapshot.getValue(LocationAll.class);
+                            for (DataSnapshot fish1Snapshot : dataSnapshot.getChildren()) {
+                                LocationAll l = fish1Snapshot.getValue(LocationAll.class);
 
-                              if(l.getName().equals( n )) {
+                                if (l.getName().equals(n)) {
 
+                                    Double lat = l.getLan();
+                                    Double lng = l.getLon();
+                                    LatLng marker = new LatLng(lat, lng);
+                                    String title = l.getName();
 
-                                  // Double lat = Double.parseDouble( fish1Snapshot.child( "1" ).child( "lan" ).getValue().toString() );
-                                  /// Double lng = Double.parseDouble( fish1Snapshot.child( "1" ).child( "lon" ).getValue().toString() );
-
-                                  Double lat = l.getLan();
-                                  Double lng = l.getLon();
-                                  LatLng marker = new LatLng( lat, lng );
-                                  // String title = fish1Snapshot.child( String.valueOf( 1 ) ).child( "name" ).getValue().toString();
-                                  String title = l.getName();
-
-                                  MMap.addMarker( new MarkerOptions().position( marker ).title( title ) ).setTag( l.getName());
-                              }
+                                    MMap.addMarker(new MarkerOptions().position(marker).title(title)).setTag(l.getName());
+                                }
                             }
                         }
 
@@ -166,7 +157,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                         }
-                    } );
+                    });
 
                 }
             }
@@ -181,20 +172,21 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
-        Toast.makeText(getApplicationContext(), marker.getTag().toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "SWIP UP FOR DETAILS", Toast.LENGTH_SHORT).show();
         setList(marker.getTag().toString());
+        setDestinationL(marker.getTag().toString());
         name = marker.getTag().toString();
         return false;
     }
 
-    public void setList(String ID){
+    public void setList(String ID) {
         try {
             listfish.clear();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
-      //  Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
         dbshop = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpend).child(ID);
 
         dbshop.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -202,16 +194,16 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot fishSnapshot : dataSnapshot.getChildren())  {
-                  DailySelling  fish1 = fishSnapshot.getValue(DailySelling.class);
-                   // fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
-                  //  fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
-                 listfish.add(fish1.toString());
-                  //  System.out.println(listfish.get( 0 ));
-                 //   Toast.makeText(getApplicationContext(),fish1.getFishname(), Toast.LENGTH_SHORT).show();
+                for (DataSnapshot fishSnapshot : dataSnapshot.getChildren()) {
+                    DailySelling fish1 = fishSnapshot.getValue(DailySelling.class);
+                    // fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
+                    //  fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
+                    listfish.add(fish1.toString());
+                    //  System.out.println(listfish.get( 0 ));
+                    //   Toast.makeText(getApplicationContext(),fish1.getFishname(), Toast.LENGTH_SHORT).show();
                 }
                 listView = findViewById(R.id.listView);
-                AA = new ArrayAdapter<String>(MapsSearchAll.this,android.R.layout.simple_expandable_list_item_1, listfish);
+                AA = new ArrayAdapter<String>(MapsSearchAll.this, android.R.layout.simple_expandable_list_item_1, listfish);
                 listView.setAdapter(AA);
 
             }
@@ -222,23 +214,39 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         });
 
 
+    }
 
+    public void setDestinationL(String ID) {
+        locationDb = FirebaseDatabase.getInstance().getReference().child("location").child(ID);
+        locationDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Double lat = Double.parseDouble(dataSnapshot.child("lan").getValue().toString());
+                Double lon = Double.parseDouble(dataSnapshot.child("lon").getValue().toString());
+                System.out.println(dataSnapshot.child("lan").getValue().toString() + "inside");
+                System.out.println(dataSnapshot.child("lon").getValue().toString() + "inside");
 
+                Destination = new LatLng(lat, lon);
 
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
-
-    public void showPlace(final String FishType){
+    public void showPlace(final String FishType) {
         dbRef = FirebaseDatabase.getInstance().getReference().child("location");
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(int i=1;i<=dataSnapshot.getChildrenCount();i++) {
-                    if(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString().equalsIgnoreCase(FishType)) {
+                for (int i = 1; i <= dataSnapshot.getChildrenCount(); i++) {
+                    if (dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString().equalsIgnoreCase(FishType)) {
                         LatLng negombo = new LatLng(Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lan").getValue().toString()), Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lon").getValue().toString()));
                         MMap.addMarker(new MarkerOptions().position(negombo).title(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString()));
                     }
@@ -255,85 +263,84 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         Toast.makeText(getApplicationContext(), "All locations are loaded", Toast.LENGTH_SHORT).show();
     }
 
-    private void getDeviceLocation(){
-        Log.d(TAG,"device location");
+    private void getDeviceLocation() {
+        Log.d(TAG, "device location");
 
         FLPC = LocationServices.getFusedLocationProviderClient(this);
 
-        try{
+        try {
             Task location = FLPC.getLastLocation();
             location.addOnCompleteListener(new OnCompleteListener() {
                 @Override
                 public void onComplete(@NonNull Task task) {
-                    if(task.isSuccessful()){
-                        Log.d(TAG,"found location");
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "found location");
                         Location current = (Location) task.getResult();
+                        currentLoc = new LatLng(current.getLatitude(), current.getLongitude());
+                        moveCamera(new LatLng(current.getLatitude(), current.getLongitude())
+                                , 15f);
 
-//                        System.out.println(current.getLatitude());
-
-                        moveCamera(new LatLng(current.getLatitude(),current.getLongitude())
-                                ,15f);
-
-                    }else{
-                        Log.d(TAG,"found location: null");
-                        Toast.makeText(MapsSearchAll.this,"Unable",Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.d(TAG, "found location: null");
+                        Toast.makeText(MapsSearchAll.this, "Unable", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
 
-        }catch (SecurityException e){
-            Log.e(TAG,"getDevice location"+ e.getMessage());
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDevice location" + e.getMessage());
         }
 
     }
 
-    private void moveCamera(LatLng latLan,float zoom){
-        Log.d(TAG,"MOVING...");
+    private void moveCamera(LatLng latLan, float zoom) {
+        Log.d(TAG, "MOVING...");
 
-        MMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLan,zoom));
+        MMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLan, zoom));
     }
 
-    private void initMap(){
-        Log.d(TAG,"Initializing Map");
-        SupportMapFragment MF=( SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+    private void initMap() {
+        Log.d(TAG, "Initializing Map");
+        SupportMapFragment MF = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         MF.getMapAsync(MapsSearchAll.this);
 
     }
 
-    private void getLocationPermission(){
-        Log.d(TAG,"getting location");
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+    private void getLocationPermission() {
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),FiLo)== PackageManager.PERMISSION_GRANTED){
-            if(ContextCompat.checkSelfPermission(this.getApplicationContext(),CoLo)== PackageManager.PERMISSION_GRANTED ){
+        Log.d(TAG, "getting location");
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
-                mLocationG=true;
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(), FiLo) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(), CoLo) == PackageManager.PERMISSION_GRANTED) {
+
+                mLocationG = true;
                 initMap();
-            }else{
-                ActivityCompat.requestPermissions(this,permissions,Location_re_code);
+            } else {
+                ActivityCompat.requestPermissions(this, permissions, Location_re_code);
             }
-        }else{
-            ActivityCompat.requestPermissions(this,permissions,Location_re_code);
+        } else {
+            ActivityCompat.requestPermissions(this, permissions, Location_re_code);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        mLocationG=false;
+        mLocationG = false;
 
-        switch(requestCode){
-            case Location_re_code:{
-                if(grantResults.length>0){
-                    for(int i =0;i<grantResults.length;i++){
-                        if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
-                            mLocationG=false;
-                            Log.d(TAG,"Permission failed");
+        switch (requestCode) {
+            case Location_re_code: {
+                if (grantResults.length > 0) {
+                    for (int i = 0; i < grantResults.length; i++) {
+                        if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                            mLocationG = false;
+                            Log.d(TAG, "Permission failed");
                             break;
                         }
                     }
-                    Log.d(TAG,"Permission Granted");
-                    mLocationG=true;
+                    Log.d(TAG, "Permission Granted");
+                    mLocationG = true;
                     //intiate our map
                     initMap();
                 }
@@ -342,77 +349,45 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         }
     }
 
-    public void gotoShop(View view){
-        if(name==null)
-            Toast.makeText( getApplicationContext(),"Select Shop On Map",Toast.LENGTH_SHORT ).show();
+    public void gotoShop(View view) {
+        if (name == null)
+            Toast.makeText(getApplicationContext(), "Select Shop On Map", Toast.LENGTH_SHORT).show();
         else {
-            Intent intent = new Intent( this, Shop.class );
-            intent.putExtra( "name", name );
-            startActivity( intent );
+            Intent intent = new Intent(this, Shop.class);
+            intent.putExtra("name", name);
+            startActivity(intent);
         }
 
     }
 
-    private String getURL(LatLng l1,LatLng l2){
-        String str_org= "origin="+ l1.latitude+","+l1.longitude;
+    private String getURL(LatLng l1, LatLng l2) {
+        String str_org = "origin=" + l1.latitude + "," + l1.longitude;
 
-        String str_dest = "destination="+ l2.latitude+","+l2.longitude;
+        String str_dest = "destination=" + l2.latitude + "," + l2.longitude;
 
 
-        String mode="mode=driving";
+        String mode = "mode=driving";
 
-        String param = str_org+"&"+str_dest+"&"+mode;
+        String param = str_org + "&" + str_dest + "&" + mode;
 
         String output = "json";
 
 
-        String URL="https://maps.googleapis.com/maps/api/directions/"+ output+"?"+param+"&key=AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4";
+        String URL = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param + "&key=AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4";
         System.out.println(URL);
         return URL;
     }
 
-    private String  requestDirection(String requrl) throws IOException {
-        String respose="";
-        InputStream is=null;
-        HttpURLConnection uc= null;
-
-        try{
-            URL url= new URL(requrl);
-            uc = (HttpURLConnection)url.openConnection();
-            uc.connect();
-
-            is = uc.getInputStream();
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader br = new BufferedReader(isr);
-
-            StringBuffer stringBuffer = new StringBuffer();
-            String line="";
-            while ((line = br.readLine()) != null){
-                stringBuffer.append(line);
-            }
-
-            respose = stringBuffer.toString();
-            br.close();
-            isr.close();
-
-        }catch (Exception e){
-
-        }finally {
-            if(is != null){
-                is.close();
-            }
-            uc.disconnect();
-        }
-        return respose;
-
-    }
-
     @Override
-    public void onTaskDone(Object... values){
-        if(currentPolyline!= null){
+    public void onTaskDone(Object... values) {
+        if (currentPolyline != null) {
+            System.out.println("==========inside TaskDone================");
             currentPolyline.remove();
-            currentPolyline = MMap.addPolyline((PolylineOptions) values[0]);
         }
+        currentPolyline = MMap.addPolyline((PolylineOptions) values[0]);
+        currentPolyline.setWidth(5);
+        //currentPolyline.setColor(android.R.color.holo_blue_light);
+
     }
 
 
