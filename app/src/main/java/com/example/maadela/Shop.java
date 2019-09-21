@@ -2,6 +2,9 @@ package com.example.maadela;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +49,8 @@ public class Shop extends Activity {
     EditText input;
     DatabaseReference dbref;
     Requests requests;
+    Float rate,count;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -62,9 +69,42 @@ public class Shop extends Activity {
 
         TextView head = (TextView)findViewById( R.id.header );
         head.setText( shopname );
+        final TextView r = (TextView)findViewById( R.id.ratesize );
+
+
+        DatabaseReference rateref = FirebaseDatabase.getInstance().getReference().child( "location" );
+        rateref.addListenerForSingleValueEvent( new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child( shopname ).hasChild( "rate" )) {
+                    rate = Float.parseFloat(dataSnapshot.child( shopname ).child( "rate" ).getValue().toString());
+                    count = Float.parseFloat( dataSnapshot.child( shopname ).child( "count" ).getValue().toString() );
+                    Float sum = rate/count;
+                    DecimalFormat decimalFormat = new DecimalFormat("#.0");
+                    String numberAsString = decimalFormat.format(sum);
+                    r.setText( "Rating " + numberAsString );
+                }
+                else
+                    r.setText( "Rating is 0 yet" );
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        } );
+
+
+
+
+
+
+
         databaseFish = FirebaseDatabase.getInstance().getReference("DailySelling").child(DateShopOpend).child(shopname) ;
         listviewfish = (ListView)findViewById( R.id.fishslist );
         fishlist = new ArrayList<>(  );
+
+        notification();
 
         databaseFish.addValueEventListener( new ValueEventListener() {
             @Override
@@ -86,6 +126,7 @@ public class Shop extends Activity {
                     }
                 } );
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -116,12 +157,7 @@ public class Shop extends Activity {
         input.setHint("Enter Amount (Kg)" );
         input.setInputType( InputType.TYPE_CLASS_NUMBER );
         builder.setView(input);
-        //input = new EditText( this );
-        //input.setPadding( 300,10,0,0  );
-        //input.setWidth( 10 );
-        //input.setHeight( 10 );
-        //builder.setView( input );
-        //input.setText( Double.toString( fishlist.get( i ).getRate()) );
+
         builder.setPositiveButton( "Request", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -144,31 +180,32 @@ public class Shop extends Activity {
         pbutton.setTextColor( Color.BLACK);
     }
 
-
-
-
     public void sendrequest(int i,String d){
-        time = new SimpleDateFormat("HH:mm").format(new Date());
+        System.out.println( "nusfsdjsdjgsj"+d );
+        if(d.equals( "" ))
+            Toast.makeText(getApplicationContext(), "Please Enter Amount Kg",Toast.LENGTH_SHORT).show();
+        else {
+            time = new SimpleDateFormat( "HH:mm" ).format( new Date() );
 
-        requests = new Requests();
+            requests = new Requests();
 
-        requests.setFid( fishlist.get( i ).getId() );
-        requests.setFishname( fishlist.get( i ).getFishname() );
-        requests.setShopname( fishlist.get( i ).getShopName() );
-        requests.setCusname( cusname );
-        requests.setTime( time );
-        requests.setAmount( d );
-        requests.setStatus( "Pending" );
-        dbref = FirebaseDatabase.getInstance().getReference().child("Request").child( fishlist.get( i ).getDate() );
+            requests.setFid( fishlist.get( i ).getId() );
+            requests.setFishname( fishlist.get( i ).getFishname() );
+            requests.setShopname( fishlist.get( i ).getShopName() );
+            requests.setCusname( cusname );
+            requests.setTime( time );
+            requests.setAmount( d );
+            requests.setStatus( "Pending" );
+            dbref = FirebaseDatabase.getInstance().getReference().child( "Request" ).child( fishlist.get( i ).getDate() );
 
 
-       // dbref.push().setValue(requests);
-        DatabaseReference  newref     = dbref.push();
-        String pushid = newref.getKey();
-        requests.setReqid( pushid );
-        newref.setValue( requests );
+            DatabaseReference newref = dbref.push();
+            String pushid = newref.getKey();
+            requests.setReqid( pushid );
+            newref.setValue( requests );
 
-        Toast.makeText(getApplicationContext(), "Data Save Succesfull",Toast.LENGTH_SHORT).show();
+            Toast.makeText( getApplicationContext(), "Data Save Succesfull", Toast.LENGTH_SHORT ).show();
+        }
 
 
     }
@@ -179,4 +216,43 @@ public class Shop extends Activity {
         startActivity( intent );
     }
 
+    public void notification(){
+        DatabaseReference rrref = FirebaseDatabase.getInstance().getReference().child( "Request" ).child( DateShopOpend );
+        rrref.addValueEventListener( new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot notySnapshot : dataSnapshot.getChildren()){
+                    Requests r = notySnapshot.getValue(Requests.class);
+                    if(r.getStatus().equals( "Sold" )&&r.getCusname().equals( cusname )){
+                        NotificationManager mNotifyManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                        NotificationCompat.Builder mBuilder = (NotificationCompat.Builder)
+                                new NotificationCompat.Builder(Shop.this)
+                                        .setSmallIcon(R.drawable.icon)
+                                        .setContentTitle("Rate Shop")
+                                        .setContentText("    "+r.getShopname());
+                        Intent resultIntent = new Intent(Shop.this, RatingShop.class); //to open an activity on touch notification
+                        resultIntent.putExtra( "sname",r.getShopname() );
+                        resultIntent.putExtra( "rid",r.getReqid() );
+                        PendingIntent resultPendingIntent = PendingIntent
+                                .getActivity(Shop.this, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        mBuilder.setContentIntent(resultPendingIntent);
+                        Notification notification = mBuilder.build();
+                        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+                        mNotifyManager.notify(1, notification);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        } );
+
+    }
+
+
+
 }
+
