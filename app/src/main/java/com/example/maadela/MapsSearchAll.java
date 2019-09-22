@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -61,9 +62,10 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     private FusedLocationProviderClient FLPC;
     DatabaseReference dbRef, dbshop, locationDb;
     ListView listView;
+    TextView swipup;
     ArrayAdapter<String> AA;
     ArrayList<String> listfish;
-    String DateShopOpend;
+    String DateShopOpened;
     String name;
     Polyline currentPolyline;
     String url;
@@ -73,6 +75,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     LatLng Destination;
     boolean mLocationG;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +84,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         listfish = new ArrayList<String>();
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        DateShopOpend = df.format(c);
+        DateShopOpened = df.format(c);
 
         //direction
         btn = findViewById(R.id.dir);
@@ -124,7 +127,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
     public void showAll() {
         MMap.setOnMarkerClickListener(this);
-        dbRef = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpend);
+        dbRef = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpened);
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -135,6 +138,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
                     //Toast.makeText(getApplicationContext(), dataSnapshot.child(String.valueOf(i)).child("ID").getValue().toString(), Toast.LENGTH_SHORT).show();
 
                     DatabaseReference rf = FirebaseDatabase.getInstance().getReference().child("location");
+
                     rf.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -173,6 +177,8 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public boolean onMarkerClick(final Marker marker) {
         Toast.makeText(getApplicationContext(), "SWIP UP FOR DETAILS", Toast.LENGTH_SHORT).show();
+        swipup = findViewById(R.id.shopname);
+        swipup.setText(marker.getTag().toString());
         setList(marker.getTag().toString());
         setDestinationL(marker.getTag().toString());
         name = marker.getTag().toString();
@@ -187,7 +193,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         }
 
         //  Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
-        dbshop = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpend).child(ID);
+        dbshop = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpened).child(ID);
 
         dbshop.addListenerForSingleValueEvent(new ValueEventListener() {
 

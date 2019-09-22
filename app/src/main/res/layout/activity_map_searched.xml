@@ -70,15 +70,21 @@
 
         <Button
             android:id="@+id/button2"
-            android:layout_width="134dp"
-            android:layout_height="65dp"
+            android:layout_width="231dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:layout_marginTop="278dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/common_google_signin_btn_text_dark_default"
             android:onClick="gotoShop"
             android:text="Go To Shop" />
 
         <Button
             android:id="@+id/dir"
             android:layout_width="match_parent"
-            android:layout_height="78dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="7dp"
+            android:background="@color/common_google_signin_btn_text_dark_default"
             android:text="Direction" />
 
 

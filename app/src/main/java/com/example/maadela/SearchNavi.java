@@ -68,7 +68,7 @@ public class SearchNavi extends Activity
         et.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent in = new Intent( SearchNavi.this,MapsSearchAll.class );
+                Intent in = new Intent( SearchNavi.this,MapSearched.class );
 
                 in.putExtra( "fishname",Fish[i] );
                 startActivity( in );
