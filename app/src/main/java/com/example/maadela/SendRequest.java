@@ -174,8 +174,8 @@ public class SendRequest extends Activity {
 
     }
 
-    public void DialogboxCallshop(int i){
-        final int j = i;
+    public void DialogboxCallshop(int k){
+        final int j = k;
         AlertDialog.Builder builder = new AlertDialog.Builder( this );
 
         builder.setTitle( "Shop Details" );
@@ -190,8 +190,8 @@ public class SendRequest extends Activity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 Intent intent = new Intent( SendRequest.this,MapSearched.class );
-                intent.putExtra( "ShopName",requestsList.get( i ).getShopname() );
-                System.out.println( requestsList.get( i ).getShopname()+"jhdkadjdjkhdkjdf" );
+               intent.putExtra( "ShopName",requestsList.get( j ).getShopname() );
+                System.out.println( requestsList.get( j ).getShopname()+"jhdkadjdjkhdkjdf" );
                 startActivity( intent );
             }
         } );
