@@ -51,7 +51,7 @@ public class SearchNavi extends Activity
     User us;
     private Button btn;
     String username;
-       private static final String[] Fish = new String[]{"Balaya","Thora","Thalmaha","Tuuna"};
+      // private static final String[] Fish = new String[]{"Balaya","Thora","Thalmaha","Tuuna"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -62,7 +62,7 @@ public class SearchNavi extends Activity
         username = sharedPreferences.getString( "username","" );
         btn= (Button)findViewById( R.id.search );
         AutoCompleteTextView et = findViewById( R.id.fishname );
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,Fish );
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,FishItemNames.Fish );
         et.setAdapter( adapter );
 
         et.setOnItemClickListener( new AdapterView.OnItemClickListener() {
@@ -70,7 +70,7 @@ public class SearchNavi extends Activity
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent in = new Intent( SearchNavi.this,MapsSearchAll.class );
 
-                in.putExtra( "fishname",Fish[i] );
+                in.putExtra( "fishname",FishItemNames.Fish[i] );
                 startActivity( in );
                 finish();
             }

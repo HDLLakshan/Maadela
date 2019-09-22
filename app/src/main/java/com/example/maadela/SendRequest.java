@@ -56,7 +56,6 @@ public class SendRequest extends Activity {
         requestsList = new ArrayList<>(  );
         listViewRequest = (ListView)findViewById( R.id.rlist );
 
-        phoneNumber="0768738018";
 
         dbref = FirebaseDatabase.getInstance().getReference("Request").child(DateShopOpend);
         dbref.addValueEventListener( new ValueEventListener() {
@@ -80,7 +79,7 @@ public class SendRequest extends Activity {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                             if(requestsList.get( i ).getStatus().equals( "Confirmed" ))
-                                DialogboxCallshop( );
+                                 getphonenum( i );
                             else if(requestsList.get( i ).getStatus().equals( "Sold" ))
                                 DialogboxRateShop( i );
                             else if(requestsList.get( i ).getStatus().equals( "Pending" ))
@@ -175,7 +174,8 @@ public class SendRequest extends Activity {
 
     }
 
-    public void DialogboxCallshop(){
+    public void DialogboxCallshop(int i){
+        final int j = i;
         AlertDialog.Builder builder = new AlertDialog.Builder( this );
 
         builder.setTitle( "Shop Details" );
@@ -189,7 +189,10 @@ public class SendRequest extends Activity {
         } ).setNegativeButton( "Get Direction ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //Intent intent = new Intent( SendRequest.this, )
+                Intent intent = new Intent( SendRequest.this,MapSearched.class );
+                intent.putExtra( "ShopName",requestsList.get( i ).getShopname() );
+                System.out.println( requestsList.get( i ).getShopname()+"jhdkadjdjkhdkjdf" );
+                startActivity( intent );
             }
         } );
 
@@ -198,5 +201,25 @@ public class SendRequest extends Activity {
         alertDialog.show();
         Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
         pbutton.setTextColor( Color.BLACK);
+        Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+        nbutton.setTextColor( Color.BLACK);
+    }
+
+    public void getphonenum(int i){
+        final int j = i;
+        DatabaseReference rref = FirebaseDatabase.getInstance().getReference().child( "SellerUser" ).child( requestsList.get( i ).getShopname() );
+        rref.addListenerForSingleValueEvent( new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren())
+                    phoneNumber = dataSnapshot.child( "phonenum" ).getValue().toString();
+               DialogboxCallshop( j );
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        } );
     }
 }
