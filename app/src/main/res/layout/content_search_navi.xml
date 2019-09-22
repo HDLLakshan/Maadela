@@ -35,7 +35,7 @@
         android:layout_width="170dp"
         android:layout_height="46dp"
         android:onClick="sendMessage"
-        android:text="SEARCH"
+        android:text="VIEW ALL SHOPS"
         android:theme="@style/AppTheme.Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

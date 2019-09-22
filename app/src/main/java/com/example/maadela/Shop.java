@@ -83,10 +83,10 @@ public class Shop extends Activity {
                     Float sum = rate/count;
                     DecimalFormat decimalFormat = new DecimalFormat("#.0");
                     String numberAsString = decimalFormat.format(sum);
-                    r.setText( "Rating " + numberAsString );
+                    r.setText(  numberAsString );
                 }
                 else
-                    r.setText( "Rating 0 " );
+                    r.setText( "0" );
             }
 
             @Override
@@ -264,7 +264,7 @@ public class Shop extends Activity {
         //Shadow of the Of the Text Color
         text.setShadowLayer(0, 0, 0, Color.TRANSPARENT);
         text.setTextColor(Color.WHITE);
-       // text.setTextSize(12);
+       text.setTextSize(16);
         toast.show();
     }
 

@@ -23,41 +23,56 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.91" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="18dp"
+        android:layout_height="19dp"
+        android:src="@drawable/rating"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/ratesize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.158" />
+
     <TextView
         android:id="@+id/header"
-        android:layout_width="215dp"
-        android:layout_height="55dp"
+        android:layout_width="257dp"
+        android:layout_height="52dp"
         android:layout_marginTop="48dp"
         android:gravity="center"
         android:text="My Shop"
         android:textColor="@color/colorPrimary"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <ListView
-        android:id="@+id/fishslist"
-        android:layout_width="344dp"
-        android:layout_height="397dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ListView
+        android:id="@+id/fishslist"
+        android:layout_width="344dp"
+        android:layout_height="457dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header"
+        app:layout_constraintVertical_bias="0.275" >
+
+    </ListView>
+
     <TextView
         android:id="@+id/ratesize"
-        android:layout_width="83dp"
-        android:layout_height="31dp"
-        android:text="TextView"
+        android:layout_width="45dp"
+        android:layout_height="17dp"
+        android:text="Loading Data..."
+        android:gravity="right"
         android:textColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.928"
+        app:layout_constraintHorizontal_bias="0.917"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.155" />
+        app:layout_constraintVertical_bias="0.159" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

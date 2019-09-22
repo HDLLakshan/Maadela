@@ -35,7 +35,7 @@ public class RatingShop extends AppCompatActivity {
         Intent i = getIntent();
         shopname = i.getStringExtra( "sname" );
         rid = i.getStringExtra( "rid" );
-        System.out.println( "Elllllll"+shopname );
+
 
         ratingBar =(RatingBar)findViewById( R.id.ratingBar );
         button =(Button)findViewById( R.id.confirm );

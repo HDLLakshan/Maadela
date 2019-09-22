@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         username = sharedPreferences.getString("username", "");
-        System.out.println( "faddfafga===="+username );
+
 
         Handler handler = new Handler(  );
         handler.postDelayed( new Runnable() {
@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
                             if(dataSnapshot.hasChild( username )){
 
                                 if((dataSnapshot.child( username ).child( "status" ).getValue().toString()).equals( "true" )){
-                                   intent = new Intent( MainActivity.this,MapLoc.class );
+                                   intent = new Intent( MainActivity.this,SearchNavi.class );
                                     startActivity(intent);
                                     finish();
                                 }else {
