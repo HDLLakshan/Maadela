@@ -21,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,9 +36,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
-public class MapSearched extends AppCompatActivity implements OnMapReadyCallback {
+public class MapSearched extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = "MapActivity";
     private static final String FiLo = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -46,13 +50,25 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
     private Boolean mLocationG = false;
     private GoogleMap MMap;
     private FusedLocationProviderClient FLPC;
-    DatabaseReference dbRef;
+    DatabaseReference dbRef,DatabaseReference, dbshop;
+    String fishname;
+    LatLng location;
+    String DateShopOpened;
+    String shopname;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_searched);
         getLocationPermission();
+        Intent i = getIntent();
+        fishname =i.getStringExtra("fishname");
+        shopname = i.getStringExtra("ShopName");
+        System.out.println(i.getStringExtra("fishname")+"========OnCreate========");
+
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        DateShopOpened = df.format(c);
     }
 
     public void onMapReady(GoogleMap gm) {
@@ -62,8 +78,11 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
         MMap = gm;
         MMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
 
-        showPlace("keels");
-
+        if(!fishname.equals(null)) {
+            showPlace(fishname);
+        }else if(!shopname.equals(null)){
+            getLocationFire(shopname);
+        }
 
         getDeviceLocation();
         if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -104,16 +123,26 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
     }
 
     public void showPlace(final String FishType){
-        dbRef = FirebaseDatabase.getInstance().getReference().child("location");
+        MMap.setOnMarkerClickListener(this);
+
+
+        dbRef = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpened);
 
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                for(int i=1;i<=dataSnapshot.getChildrenCount();i++) {
-                    if(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString().equalsIgnoreCase(FishType)) {
-                        LatLng negombo = new LatLng(Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lan").getValue().toString()), Double.parseDouble(dataSnapshot.child(String.valueOf(i)).child("lon").getValue().toString()));
-                        MMap.addMarker(new MarkerOptions().position(negombo).title(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString()));
+                for(DataSnapshot fish1Snapshot : dataSnapshot.getChildren()) {
+                    String n = fish1Snapshot.getKey();
+                    System.out.println("=========1for========="+fish1Snapshot.getKey());
+                    for (DataSnapshot last : fish1Snapshot.getChildren()) {
+                        String k= last.getKey();
+                        System.out.println("========2for=========="+last.child("fishname").getValue().toString());
+                        if (last.child("fishname").getValue().toString().equals(FishType)) {
+                            System.out.println(last.child("shopName").getValue().toString());
+                            System.out.println(last.child("fishname").getValue().toString());
+                            getLocationFire(last.child("shopName").getValue().toString());
+                        }
                     }
                 }
             }
@@ -126,6 +155,29 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
 
 
         Toast.makeText(getApplicationContext(), "All locations are loaded", Toast.LENGTH_SHORT).show();
+    }
+
+    public void getLocationFire(final String name){
+        System.out.println("=========name method========="+name);
+        dbshop = FirebaseDatabase.getInstance().getReference().child("location");
+        dbshop.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                LocationAll l = dataSnapshot.child(name).getValue(LocationAll.class);
+                System.out.println("=================="+l.getLan());
+
+                location = new LatLng(l.getLan(), l.getLon());
+                MMap.addMarker(new MarkerOptions().position(location).title(l.getName())).setTag(l.getName());
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
 
@@ -272,5 +324,9 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
     }
 
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        return false;
+    }
 }
 
