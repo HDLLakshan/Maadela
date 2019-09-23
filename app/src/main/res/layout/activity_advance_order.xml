@@ -8,29 +8,29 @@
 
     <AutoCompleteTextView
         android:id="@+id/fishname"
-        android:layout_width="194dp"
-        android:layout_height="46dp"
+        android:layout_width="162dp"
+        android:layout_height="36dp"
         android:background="@drawable/edit_text_border"
         android:completionHint="Enter Fish"
         android:completionThreshold="1"
         android:gravity="center"
         android:hint="Enter Fish Item"
         android:padding="10dp"
+        android:textSize="14dp"
         android:textColor="@color/colorPrimary"
         android:textColorHint="@color/colorPrimary"
-        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.972"
+        app:layout_constraintHorizontal_bias="0.933"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.272" />
+        app:layout_constraintVertical_bias="0.27" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="257dp"
         android:layout_height="46dp"
-        android:text="Place an Order"
+        android:text="Place a Pre-Order"
         android:textAlignment="center"
         android:textColor="#DC0F0E0E"
         android:textSize="27sp"
@@ -73,20 +73,26 @@
 
     <EditText
         android:id="@+id/editText2"
-        android:layout_width="184dp"
-        android:layout_height="46dp"
-        android:background="#14160909"
+        android:layout_width="162dp"
+        android:layout_height="36dp"
+        android:background="@drawable/edit_text_border"
+        android:completionHint="Enter Fish"
+        android:completionThreshold="1"
         android:ems="10"
+        android:gravity="center"
         android:hint="Ex : 10Kg"
         android:inputType="textPersonName"
+        android:padding="10dp"
         android:textAlignment="center"
-        android:textColor="#E91F1D1D"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.929"
+        app:layout_constraintHorizontal_bias="0.931"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.394" />
+        app:layout_constraintVertical_bias="0.387" />
 
     <TextView
         android:id="@+id/textView4"
@@ -105,45 +111,52 @@
 
     <EditText
         android:id="@+id/editText3"
-        android:layout_width="184dp"
-        android:layout_height="46dp"
-        android:background="#14160909"
+        android:layout_width="162dp"
+        android:layout_height="36dp"
+        android:background="@drawable/edit_text_border"
+        android:completionHint="Enter Fish"
+
+
+        android:completionThreshold="1"
         android:ems="10"
-        android:hint="Touch here to select date"
+        android:gravity="center"
+        android:hint="Touch to select date"
         android:inputType="textPersonName"
+        android:padding="10dp"
         android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/colorPrimary"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.929"
+        app:layout_constraintHorizontal_bias="0.931"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.519" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <Button
         android:id="@+id/orderBtn"
-        android:layout_width="218dp"
-        android:layout_height="47dp"
-        android:background="#0F0B0B"
+        android:layout_width="118dp"
+        android:layout_height="40dp"
+        android:background="#FFFFFF"
         android:text="Order"
-        android:textColor="#FFFFFF"
+        android:textColor="#0F0B0B"
         android:textSize="21sp"
-        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.435"
+        app:layout_constraintHorizontal_bias="0.458"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.75" />
+        app:layout_constraintVertical_bias="0.747" />
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="222dp"
-        android:layout_height="50dp"
-        android:background="#FA130F0F"
+        android:layout_width="198dp"
+        android:layout_height="40dp"
+        android:background="#FFFFFF"
         android:onClick="sendviewRMessage"
         android:text="View ordered items"
-        android:textColor="#FFF9F9"
+        android:textColor="#0F0B0B"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
