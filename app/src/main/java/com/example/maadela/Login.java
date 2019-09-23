@@ -154,7 +154,7 @@ public class Login extends AppCompatActivity implements TextWatcher, OnCheckedCh
                         us.setStatus(true);
                         dbref = FirebaseDatabase.getInstance().getReference().child("User").child(e1.getText().toString());
                         dbref.setValue(us);
-                        Toast.makeText(getApplicationContext(), "Log Out successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Log in successfully", Toast.LENGTH_SHORT).show();
 
                     } catch (NumberFormatException e) {
                         Toast.makeText(getApplicationContext(), "invalid", Toast.LENGTH_SHORT).show();

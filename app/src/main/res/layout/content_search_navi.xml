@@ -47,10 +47,10 @@
     <Button
         android:id="@+id/button3"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="125dp"
-        android:layout_height="47dp"
+        android:layout_width="214dp"
+        android:layout_height="50dp"
         android:onClick="sendOrderMessage"
-        android:text="Order"
+        android:text=" Make a Pre-Order"
         android:textColor="@color/colorPrimary"
         android:theme="@style/AppTheme.Button"
         app:layout_constraintBottom_toBottomOf="parent"

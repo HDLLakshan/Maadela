@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +28,7 @@ public class RatingShop extends AppCompatActivity {
     Button button;
     Requests req;
     DatabaseReference dbref;
+    TextView tnq;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -67,7 +68,7 @@ public class RatingShop extends AppCompatActivity {
                                dbref.setValue( rating );
                                DatabaseReference dbrefcnt=FirebaseDatabase.getInstance().getReference().child( "location" ).child( shopname ).child( "count" );
                                dbrefcnt.setValue( 1 );
-
+                             //  YoYo.with( Techniques.BounceInRight ).duration( 750 ).repeat( 1 ).playOn( tnq );
                            }
                        }
                    }
@@ -98,7 +99,7 @@ public class RatingShop extends AppCompatActivity {
                     req.setStatus( "Rated" );
                     dbref = FirebaseDatabase.getInstance().getReference().child( "Request" ).child( DateShopOpend ).child( id );
                     dbref.setValue( req);
-                    Toast.makeText( getApplicationContext(), "Your Rated is Succesfully", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( getApplicationContext(), "Thanks for rating", Toast.LENGTH_SHORT ).show();
                 }
             }
 

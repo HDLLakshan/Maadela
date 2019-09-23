@@ -1,5 +1,6 @@
 package com.example.maadela;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -16,16 +17,17 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AdvanceOrder extends AppCompatActivity {
 
-    private Spinner spinner;
 
     Button ordbtn;
     EditText amount , date;
-    Spinner type;
     DatabaseReference db;
     OrderClass od;
     private String customer;
@@ -50,24 +52,22 @@ public class AdvanceOrder extends AppCompatActivity {
 
 //        addListenerOnSpinnerItemSelection();
 
-        type = spinner;
+
         amount = findViewById(R.id.editText2);
         date = findViewById(R.id.editText3);
         ordbtn =  findViewById(R.id.orderBtn);
         od = new OrderClass();
-
         et = findViewById( R.id.fishname );
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,FishItemNames.Fish );
         et.setAdapter( adapter );
 
         SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         customer = sharedPreferences.getString("username", "");
 
-       custcontact = "0784567435";
-       status = "Pending";
 
-        //SharedPreferences preferences = getSharedPreferences( "customer",MODE_PRIVATE );
-        //customer = preferences.getString( "username","" );
+       status = "Pending";
+       getphonenum();
 
         db = FirebaseDatabase.getInstance().getReference().child("OrderClass");
 
@@ -97,9 +97,6 @@ public class AdvanceOrder extends AppCompatActivity {
                     String pushid = newref.getKey();
                     od.setId( pushid );
                     newref.setValue( od);
-                    //String pushid = db.getKey();
-                    //od.setId(pushid);
-                    //db.push().setValue(od);
 
 
                     Toast.makeText(getApplicationContext(),"Order has been saved",Toast.LENGTH_SHORT).show();
@@ -111,15 +108,6 @@ public class AdvanceOrder extends AppCompatActivity {
 
 
     }
-
-
-
-
- //   public void addListenerOnSpinnerItemSelection() {
-       // spinner = findViewById(R.id.spinner);
-//        spinner.setOnItemSelectedListener(new  CustomOnItemSelectedListener());
-        //ordertype = spinner;
-//    }
 
     public void onStart() {
 
@@ -138,6 +126,23 @@ public class AdvanceOrder extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getphonenum(){
+        DatabaseReference rref = FirebaseDatabase.getInstance().getReference().child( "User" ).child( customer );
+        rref.addListenerForSingleValueEvent( new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren())
+                    custcontact = dataSnapshot.child( "contactNo" ).getValue().toString();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        } );
     }
 
     public void sendviewRMessage(View view) {

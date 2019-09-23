@@ -3,6 +3,7 @@ package com.example.maadela;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -28,12 +29,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewSentOrders extends AppCompatActivity {
+public class ViewSentOrders extends Activity {
 
     ListView listvieworders;
     DatabaseReference dbOrder;
     List<OrderClass> ordlist;
-    private String sellname;
     DatabaseReference dRef;
     Dialog custrDialog;
     String cusname;
@@ -46,7 +46,7 @@ public class ViewSentOrders extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         cusname = sharedPreferences.getString("username", "");
-        //cusname = "venuri";
+
         dbOrder = FirebaseDatabase.getInstance().getReference("OrderClass");
         listvieworders = findViewById(R.id.ordervsent);
         ordlist = new ArrayList<>();
@@ -59,22 +59,19 @@ public class ViewSentOrders extends AppCompatActivity {
 
                     OrderClass ordclass = orSnapshot.getValue(OrderClass.class);
                     if((ordclass.getCustomerName()).equals(cusname)) {
-                        if(ordclass.getStatus().equals("Pending"))
+                        if(ordclass.getStatus().equals("Pending")  | ordclass.getStatus().equals("Reject"))
                             ordlist.add(ordclass);
                     }
 
                 }
 
                 ArrayAdapter adapter = new OrderList(ViewSentOrders.this,ordlist);
-                //OrderList adapter = new OrderList(ViewSentOrders.this,ordlist);
                 listvieworders.setAdapter(adapter);
 
                 listvieworders.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        System.out.println("dfsfsd");
-                        //  Toast.makeText(getApplicationContext(),fishlist.get( i ).getFishname(),Toast.LENGTH_LONG ).show();
                         sendMessage(i);
 
                     }
@@ -123,7 +120,7 @@ public class ViewSentOrders extends AppCompatActivity {
                 if(dataSnapshot.hasChild(m)){
                     dRef=FirebaseDatabase.getInstance().getReference().child("OrderClass").child(ordlist.get( i ).getId());
                     dRef.removeValue();
-                    //clearcontrol();
+
                     Toast.makeText(getApplicationContext(), "DeleteSucessfull",Toast.LENGTH_SHORT).show();
                 }else
                     Toast.makeText(getApplicationContext(), "Delete Un Sucessfull",Toast.LENGTH_SHORT).show();
