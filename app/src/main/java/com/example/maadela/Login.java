@@ -148,7 +148,7 @@ public class Login extends AppCompatActivity implements TextWatcher, OnCheckedCh
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(e1.getText().toString())) {
                     us = dataSnapshot.child(e1.getText().toString()).getValue(User.class);
-                    System.out.println( "laslaslasdl"+ us.isStatus() );
+
                     try {
 
                         us.setStatus(true);

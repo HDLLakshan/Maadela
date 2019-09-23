@@ -6,6 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".AdvanceOrder">
 
+    <AutoCompleteTextView
+        android:id="@+id/fishname"
+        android:layout_width="194dp"
+        android:layout_height="46dp"
+        android:background="@drawable/edit_text_border"
+        android:completionHint="Enter Fish"
+        android:completionThreshold="1"
+        android:gravity="center"
+        android:hint="Enter Fish Item"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimary"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.972"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.272" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="257dp"
@@ -35,23 +55,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.271" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="181dp"
-        android:layout_height="46dp"
-        android:background="#14160909"
-        android:entries="@array/fish_arrays"
-        android:prompt="@string/fish_prompt"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.929"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.272" />
 
     <TextView
         android:id="@+id/textView3"

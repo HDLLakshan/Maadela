@@ -78,9 +78,9 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
         MMap = gm;
         MMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.style_json));
 
-        if(!fishname.equals(null)) {
+        if(fishname != null) {
             showPlace(fishname);
-        }else if(!shopname.equals(null)){
+        }else if(shopname != null){
             getLocationFire(shopname);
         }
 

@@ -9,6 +9,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -32,6 +34,7 @@ public class AdvanceOrder extends AppCompatActivity {
     private String custcontact;
     private String sellcontact;
     private double totprices;
+    AutoCompleteTextView et;
 
 
     private void clearControls(){
@@ -45,13 +48,17 @@ public class AdvanceOrder extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_advance_order);
 
-        addListenerOnSpinnerItemSelection();
+//        addListenerOnSpinnerItemSelection();
 
         type = spinner;
         amount = findViewById(R.id.editText2);
         date = findViewById(R.id.editText3);
         ordbtn =  findViewById(R.id.orderBtn);
         od = new OrderClass();
+
+        et = findViewById( R.id.fishname );
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,FishItemNames.Fish );
+        et.setAdapter( adapter );
 
         SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         customer = sharedPreferences.getString("username", "");
@@ -68,14 +75,14 @@ public class AdvanceOrder extends AppCompatActivity {
         ordbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(TextUtils.isEmpty(type.getSelectedItem().toString()))
+                if(TextUtils.isEmpty(et.getText().toString()))
                     Toast.makeText(getApplicationContext(),"Please select fish type ",Toast.LENGTH_SHORT).show();
                 else if(TextUtils.isEmpty(amount.getText().toString()))
                     Toast.makeText(getApplicationContext(),"Please enter amount ",Toast.LENGTH_SHORT).show();
                 else if(TextUtils.isEmpty(date.getText().toString()))
                     Toast.makeText(getApplicationContext(),"select a date",Toast.LENGTH_SHORT).show();
                 else {
-                    od.setType(type.getSelectedItem().toString());
+                    od.setType(et.getText().toString());
                     od.setAmount(Double.parseDouble(amount.getText().toString().trim()));
                     od.setDate(date.getText().toString());
                     od.setCustomerName(customer);
@@ -108,11 +115,11 @@ public class AdvanceOrder extends AppCompatActivity {
 
 
 
-    public void addListenerOnSpinnerItemSelection() {
-        spinner = findViewById(R.id.spinner);
-        spinner.setOnItemSelectedListener(new  CustomOnItemSelectedListener());
+ //   public void addListenerOnSpinnerItemSelection() {
+       // spinner = findViewById(R.id.spinner);
+//        spinner.setOnItemSelectedListener(new  CustomOnItemSelectedListener());
         //ordertype = spinner;
-    }
+//    }
 
     public void onStart() {
 

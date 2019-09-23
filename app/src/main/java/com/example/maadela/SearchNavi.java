@@ -11,6 +11,7 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import android.provider.ContactsContract;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -51,7 +53,8 @@ public class SearchNavi extends Activity
     User us;
     private Button btn;
     String username;
-       private static final String[] Fish = new String[]{"Balaya","Thora","Thalmaha","Tuuna"};
+    TextView prf1;
+      // private static final String[] Fish = new String[]{"Balaya","Thora","Thalmaha","Tuuna"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
@@ -61,16 +64,15 @@ public class SearchNavi extends Activity
         SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         username = sharedPreferences.getString( "username","" );
         btn= (Button)findViewById( R.id.search );
-        AutoCompleteTextView et = findViewById( R.id.fishname );
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,Fish );
+        final AutoCompleteTextView et = findViewById( R.id.fishname );
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>( this,android.R.layout.simple_list_item_1,FishItemNames.Fish );
         et.setAdapter( adapter );
 
         et.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent in = new Intent( SearchNavi.this,MapSearched.class );
-
-                in.putExtra( "fishname",Fish[i] );
+                in.putExtra( "fishname",et.getText().toString().trim() );
                 startActivity( in );
                 finish();
             }
@@ -98,6 +100,8 @@ public class SearchNavi extends Activity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener( this );
 
+         prf1 = (TextView)findViewById( R.id.prf );
+//       prf1.setText(username );
 
 
 
@@ -205,5 +209,9 @@ public class SearchNavi extends Activity
         });
     }
 
+    public void gotoprofile(View View){
+        Intent prof = new Intent( SearchNavi.this, profile.class );
+        startActivity( prof );
+    }
 
 }
