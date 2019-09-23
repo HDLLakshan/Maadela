@@ -91,7 +91,7 @@ public class OrderSendNotify extends Activity {
 
         builder.setTitle( "Select an option " );
 
-        builder.setMessage( shopcontact );
+        //uilder.setMessage( shopcontact );
         builder.setPositiveButton( "Call Seller", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
