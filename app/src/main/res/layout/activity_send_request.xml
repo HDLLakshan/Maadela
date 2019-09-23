@@ -10,6 +10,7 @@
         android:id="@+id/textView3"
         android:layout_width="286dp"
         android:layout_height="65dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="Sent Requests- Today"
         android:textColor="@color/colorPrimary"
@@ -24,10 +25,9 @@
         android:id="@+id/rlist"
         android:layout_width="338dp"
         android:layout_height="517dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
