@@ -54,7 +54,7 @@ public class FishOrderRequestList extends ArrayAdapter<OrderClass> {
         orrqdate.setText("  Date Requested : "+oqrderClass.getDate());
         orrqstatus.setText("  Status : "+oqrderClass.getStatus());
         orrqContact.setText("  Seller Contact : "+oqrderClass.getSellerContact());
-        orrqpricetot.setText("  Total Price : ");
+        orrqpricetot.setText("  Total Price : "+oqrderClass.getTotprice());
 
 
 

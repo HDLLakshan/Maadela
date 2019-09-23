@@ -27,6 +27,7 @@
         android:layout_marginTop="48dp"
         android:gravity="center"
         android:text="Delete Ordered Requests"
+        android:textStyle="bold"
         android:textColor="#080808"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/ordervsent"

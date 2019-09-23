@@ -151,8 +151,8 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="198dp"
-        android:layout_height="40dp"
+        android:layout_width="254dp"
+        android:layout_height="51dp"
         android:background="#FFFFFF"
         android:onClick="sendviewRMessage"
         android:text="View ordered items"
