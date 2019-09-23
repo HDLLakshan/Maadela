@@ -13,6 +13,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -68,8 +70,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     String DateShopOpened;
     String name;
     Polyline currentPolyline;
-    String url;
-    MarkerOptions place1, place2;
+    String url = "";
     Button btn;
     LatLng currentLoc;
     LatLng Destination;
@@ -78,6 +79,13 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
+        getSupportActionBar().hide();//hide the title bar
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN); //show the activity in full screen
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_searched);
         getLocationPermission();
@@ -92,9 +100,19 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "SWIP DOWN FOR DIRECTION", Toast.LENGTH_SHORT).show();
-                url = getURL(currentLoc, Destination);
-                new FetchURL(MapsSearchAll.this).execute(url, "driving");
+
+                if(!(Destination == null)) {
+                    url = getURL(currentLoc, Destination);
+                    Toast.makeText(getApplicationContext(), "SWIP DOWN FOR DIRECTION", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    Toast.makeText(getApplicationContext(), "SELECT A MARKER", Toast.LENGTH_SHORT).show();
+                }
+
+
+                if(!(url.equals(""))) {
+                    new FetchURL(MapsSearchAll.this).execute(url, "driving");
+                }
 
             }
         });
@@ -367,6 +385,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private String getURL(LatLng l1, LatLng l2) {
+
         String str_org = "origin=" + l1.latitude + "," + l1.longitude;
 
         String str_dest = "destination=" + l2.latitude + "," + l2.longitude;
@@ -382,6 +401,7 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
         String URL = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param + "&key=AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4";
         System.out.println(URL);
         return URL;
+
     }
 
     @Override

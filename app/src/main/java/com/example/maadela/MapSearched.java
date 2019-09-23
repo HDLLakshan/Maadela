@@ -7,6 +7,12 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -23,6 +29,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -37,11 +45,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 
-public class MapSearched extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapSearched extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener ,TaskLoadedCallback{
 
     private static final String TAG = "MapActivity";
     private static final String FiLo = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -50,15 +59,34 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
     private Boolean mLocationG = false;
     private GoogleMap MMap;
     private FusedLocationProviderClient FLPC;
-    DatabaseReference dbRef,DatabaseReference, dbshop;
+    DatabaseReference dbRef,DatabaseReference, dbshop,locationDb;
     String fishname;
     LatLng location;
     String DateShopOpened;
     String shopname;
     LatLng currentLoc;
+    Button btn;
+    String url;
+    LatLng Destination;
+    String name;
+    TextView swipup;
+    ArrayList<String> listfish;
+    ListView listView;
+    ArrayAdapter<String> AA;
+    Polyline currentPolyline;
+
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
+        getSupportActionBar().hide();//hide the title bar
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN); //show the activity in full screen
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_searched);
         getLocationPermission();
@@ -70,6 +98,18 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
         DateShopOpened = df.format(c);
+
+        btn = findViewById(R.id.dir);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "SWIP DOWN FOR DIRECTION", Toast.LENGTH_SHORT).show();
+                url = getURL(currentLoc, Destination);
+                new FetchURL(MapSearched.this).execute(url, "driving");
+
+            }
+        });
     }
 
     public void onMapReady(GoogleMap gm) {
@@ -326,10 +366,98 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-
     @Override
     public boolean onMarkerClick(Marker marker) {
+        Toast.makeText(getApplicationContext(), "SWIP UP FOR DETAILS", Toast.LENGTH_SHORT).show();
+        swipup = findViewById(R.id.shopname);
+        swipup.setText(marker.getTag().toString());
+        setList(marker.getTag().toString());
+        setDestinationL(marker.getTag().toString());
+        name = marker.getTag().toString();
         return false;
     }
+
+    public void setList(String ID) {
+        try {
+            listfish.clear();
+        } catch (Exception e) {
+
+        }
+
+        //  Toast.makeText(getApplicationContext(), "yep", Toast.LENGTH_SHORT).show();
+        dbshop = FirebaseDatabase.getInstance().getReference().child("DailySelling").child(DateShopOpened).child(ID);
+
+        dbshop.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot fishSnapshot : dataSnapshot.getChildren()) {
+                    DailySelling fish1 = fishSnapshot.getValue(DailySelling.class);
+                    // fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
+                    //  fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
+                    listfish.add(fish1.toString());
+                    //  System.out.println(listfish.get( 0 ));
+                    //   Toast.makeText(getApplicationContext(),fish1.getFishname(), Toast.LENGTH_SHORT).show();
+                }
+                listView = findViewById(R.id.listView);
+                AA = new ArrayAdapter<String>(MapSearched.this, android.R.layout.simple_expandable_list_item_1, listfish);
+                listView.setAdapter(AA);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+
+    }
+
+    public void setDestinationL(String ID) {
+        locationDb = FirebaseDatabase.getInstance().getReference().child("location").child(ID);
+        locationDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Double lat = Double.parseDouble(dataSnapshot.child("lan").getValue().toString());
+                Double lon = Double.parseDouble(dataSnapshot.child("lon").getValue().toString());
+                System.out.println(dataSnapshot.child("lan").getValue().toString() + "inside");
+                System.out.println(dataSnapshot.child("lon").getValue().toString() + "inside");
+
+                Destination = new LatLng(lat, lon);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void gotoShop(View view) {
+        if (name == null)
+            Toast.makeText(getApplicationContext(), "Select Shop On Map", Toast.LENGTH_SHORT).show();
+        else {
+            Intent intent = new Intent(this, Shop.class);
+            intent.putExtra("name", name);
+            startActivity(intent);
+        }
+
+    }
+
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentPolyline != null) {
+            System.out.println("==========inside TaskDone================");
+            currentPolyline.remove();
+        }
+        currentPolyline = MMap.addPolyline((PolylineOptions) values[0]);
+        currentPolyline.setWidth(5);
+        //currentPolyline.setColor(android.R.color.holo_blue_light);
+
+    }
+
 }
 
