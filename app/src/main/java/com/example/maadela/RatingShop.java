@@ -99,7 +99,7 @@ public class RatingShop extends AppCompatActivity {
                     req.setStatus( "Rated" );
                     dbref = FirebaseDatabase.getInstance().getReference().child( "Request" ).child( DateShopOpend ).child( id );
                     dbref.setValue( req);
-                    Toast.makeText( getApplicationContext(), "Your Rated is Succesfully", Toast.LENGTH_SHORT ).show();
+                    Toast.makeText( getApplicationContext(), "Thanks for rating", Toast.LENGTH_SHORT ).show();
                 }
             }
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bci1"
     tools:context=".Shop">
 
     <Button
@@ -11,17 +12,15 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="174dp"
         android:layout_height="57dp"
-        android:layout_marginEnd="116dp"
+        android:gravity="center"
         android:onClick="gonotification"
         android:text="View All Send Requests"
         android:theme="@style/AppTheme.Button"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.91" />
+        app:layout_constraintVertical_bias="0.924" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -37,8 +36,8 @@
 
     <TextView
         android:id="@+id/header"
-        android:layout_width="257dp"
-        android:layout_height="52dp"
+        android:layout_width="265dp"
+        android:layout_height="82dp"
         android:layout_marginTop="48dp"
         android:gravity="center"
         android:text="My Shop"
@@ -57,7 +56,7 @@
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header"
-        app:layout_constraintVertical_bias="0.275" >
+        app:layout_constraintVertical_bias="0.048">
 
     </ListView>
 
