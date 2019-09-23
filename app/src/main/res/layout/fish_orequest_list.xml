@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/orrcname"
         android:layout_width="257dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/orrtype"
         android:layout_width="257dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.24"
@@ -34,7 +34,7 @@
     <TextView
         android:id="@+id/orrdate"
         android:layout_width="252dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.232"
@@ -44,7 +44,7 @@
     <TextView
         android:id="@+id/orrstatus"
         android:layout_width="270dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.262"
@@ -54,7 +54,7 @@
     <TextView
         android:id="@+id/orramount"
         android:layout_width="255dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.237"
@@ -64,7 +64,7 @@
     <TextView
         android:id="@+id/orrContact"
         android:layout_width="255dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.237"
@@ -74,7 +74,7 @@
     <TextView
         android:id="@+id/orrTotprice"
         android:layout_width="255dp"
-        android:layout_height="30dp"
+        android:layout_height="20dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.237"

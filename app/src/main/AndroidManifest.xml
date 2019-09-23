@@ -16,7 +16,8 @@
         <activity android:name=".Login" />
         <activity android:name=".SendRequest" />
         <activity android:name=".MapsSearchAll" />
-        <activity android:name=".AdvanceOrder" />
+        <activity android:name=".AdvanceOrder"
+            android:theme="@style/DatePickerTheme" />
         <activity android:name=".Shop" />
         <activity android:name=".MapSearched" />
         <activity android:name=".MapLoc" />

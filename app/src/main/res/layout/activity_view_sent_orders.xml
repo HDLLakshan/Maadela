@@ -8,13 +8,14 @@
 
     <ListView
         android:id="@+id/ordervsent"
-        android:layout_width="339dp"
-        android:layout_height="493dp"
+        android:layout_width="302dp"
+        android:layout_height="481dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="120dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.615">
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
 
 
     </ListView>
@@ -23,30 +24,31 @@
         android:id="@+id/textView2"
         android:layout_width="324dp"
         android:layout_height="49dp"
+        android:layout_marginTop="48dp"
         android:gravity="center"
         android:text="Delete Ordered Requests"
         android:textColor="#080808"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ordervsent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.597"
+        app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button4"
         android:layout_width="187dp"
         android:layout_height="53dp"
-        android:background="#FA130F0F"
+        android:layout_marginBottom="32dp"
+        android:background="#FFFFFF"
         android:onClick="gotoONotifications"
         android:text="View Notifications"
-        android:textColor="#FFF9F9"
+        android:textColor="#FA130F0F"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.957" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.981" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
