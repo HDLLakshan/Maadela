@@ -55,6 +55,7 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
     LatLng location;
     String DateShopOpened;
     String shopname;
+    LatLng currentLoc;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -194,6 +195,8 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
                     if(task.isSuccessful()){
                         Log.d(TAG,"found location");
                         Location current = (Location) task.getResult();
+                        currentLoc = new LatLng(current.getLatitude(), current.getLongitude());
+
 
 //                        System.out.println(current.getLatitude());
 

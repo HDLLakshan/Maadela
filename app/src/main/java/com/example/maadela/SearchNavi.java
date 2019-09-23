@@ -60,6 +60,14 @@ public class SearchNavi extends Activity
         super.onCreate( savedInstanceState );
         requestWindowFeature( Window.FEATURE_NO_TITLE );
         setContentView( R.layout.activity_search_navi );
+        btn = findViewById(R.id.search);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(SearchNavi.this, MapsSearchAll.class);
+                startActivity(intent);
+            }
+        });
 
         SharedPreferences sharedPreferences = getSharedPreferences("prefs", Context.MODE_PRIVATE);
         username = sharedPreferences.getString( "username","" );
