@@ -220,11 +220,9 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
 
                 for (DataSnapshot fishSnapshot : dataSnapshot.getChildren()) {
                     DailySelling fish1 = fishSnapshot.getValue(DailySelling.class);
-                    // fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
-                    //  fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
+
                     listfish.add(fish1.toString());
-                    //  System.out.println(listfish.get( 0 ));
-                    //   Toast.makeText(getApplicationContext(),fish1.getFishname(), Toast.LENGTH_SHORT).show();
+
                 }
                 listView = findViewById(R.id.listView);
                 AA = new ArrayAdapter<String>(MapsSearchAll.this, android.R.layout.simple_expandable_list_item_1, listfish);
@@ -247,8 +245,6 @@ public class MapsSearchAll extends AppCompatActivity implements OnMapReadyCallba
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Double lat = Double.parseDouble(dataSnapshot.child("lan").getValue().toString());
                 Double lon = Double.parseDouble(dataSnapshot.child("lon").getValue().toString());
-                System.out.println(dataSnapshot.child("lan").getValue().toString() + "inside");
-                System.out.println(dataSnapshot.child("lon").getValue().toString() + "inside");
 
                 Destination = new LatLng(lat, lon);
 

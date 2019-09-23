@@ -66,7 +66,7 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
     String shopname;
     LatLng currentLoc;
     Button btn;
-    String url;
+    String url="";
     LatLng Destination;
     String name;
     TextView swipup;
@@ -90,23 +90,33 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_searched);
         getLocationPermission();
+        listfish = new ArrayList<String>();
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+        DateShopOpened = df.format(c);
+
         Intent i = getIntent();
         fishname =i.getStringExtra("fishname");
         shopname = i.getStringExtra("ShopName");
         System.out.println(i.getStringExtra("fishname")+"========OnCreate========");
-
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-        DateShopOpened = df.format(c);
 
         btn = findViewById(R.id.dir);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "SWIP DOWN FOR DIRECTION", Toast.LENGTH_SHORT).show();
-                url = getURL(currentLoc, Destination);
-                new FetchURL(MapSearched.this).execute(url, "driving");
+                if(!(Destination == null)) {
+                    url = getURL(currentLoc, Destination);
+                    Toast.makeText(getApplicationContext(), "SWIP DOWN FOR DIRECTION", Toast.LENGTH_SHORT).show();
+
+                }else {
+                    Toast.makeText(getApplicationContext(), "SELECT A MARKER", Toast.LENGTH_SHORT).show();
+                }
+
+
+                if(!(url.equals(""))) {
+                    new FetchURL(MapSearched.this).execute(url, "driving");
+                }
 
             }
         });
@@ -175,13 +185,9 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
 
                 for(DataSnapshot fish1Snapshot : dataSnapshot.getChildren()) {
                     String n = fish1Snapshot.getKey();
-                    System.out.println("=========1for========="+fish1Snapshot.getKey());
                     for (DataSnapshot last : fish1Snapshot.getChildren()) {
                         String k= last.getKey();
-                        System.out.println("========2for=========="+last.child("fishname").getValue().toString());
                         if (last.child("fishname").getValue().toString().equals(FishType)) {
-                            System.out.println(last.child("shopName").getValue().toString());
-                            System.out.println(last.child("fishname").getValue().toString());
                             getLocationFire(last.child("shopName").getValue().toString());
                         }
                     }
@@ -313,20 +319,19 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
 
 
     private String getURL(LatLng l1,LatLng l2){
-        String str_org= "örigin"+ l1.latitude+","+l1.longitude;
+        String str_org = "origin=" + l1.latitude + "," + l1.longitude;
 
-        String str_dest = "destination=1"+ l2.latitude+","+l2.longitude;
+        String str_dest = "destination=" + l2.latitude + "," + l2.longitude;
 
-        String sensor ="sensor=false";
+        String mode = "mode=driving";
 
-        String mode="mode=driving";
-
-        String param = str_org+"&"+str_dest+"&"+sensor+"&"+mode;
+        String param = str_org + "&" + str_dest + "&" + mode;
 
         String output = "json";
 
-        String URL="https://maps.googleapis.com/maps/api/directions/"+ output+"?"+param;
 
+        String URL = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + param + "&key=AIzaSyDiC1SSoFYcBl_SRPWnvKCVhfUfAmdHWn4";
+        System.out.println(URL);
         return URL;
     }
 
@@ -394,11 +399,10 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
 
                 for (DataSnapshot fishSnapshot : dataSnapshot.getChildren()) {
                     DailySelling fish1 = fishSnapshot.getValue(DailySelling.class);
-                    // fish.setName(dataSnapshot.child(String.valueOf(i)).child("name").getValue().toString());
-                    //  fish.setPrice(Integer.parseInt(dataSnapshot.child(String.valueOf(i)).child("price").getValue().toString()));
+
                     listfish.add(fish1.toString());
-                    //  System.out.println(listfish.get( 0 ));
-                    //   Toast.makeText(getApplicationContext(),fish1.getFishname(), Toast.LENGTH_SHORT).show();
+
+
                 }
                 listView = findViewById(R.id.listView);
                 AA = new ArrayAdapter<String>(MapSearched.this, android.R.layout.simple_expandable_list_item_1, listfish);
@@ -421,8 +425,6 @@ public class MapSearched extends AppCompatActivity implements OnMapReadyCallback
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Double lat = Double.parseDouble(dataSnapshot.child("lan").getValue().toString());
                 Double lon = Double.parseDouble(dataSnapshot.child("lon").getValue().toString());
-                System.out.println(dataSnapshot.child("lan").getValue().toString() + "inside");
-                System.out.println(dataSnapshot.child("lon").getValue().toString() + "inside");
 
                 Destination = new LatLng(lat, lon);
 
